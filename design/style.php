@@ -1,5 +1,5 @@
 <?php header("Content-type: text/css; charset=UTF-8");
-require_once('../config.txt'); 
+require_once('../config.inc.php');
 //header('Cache-Control: max-age=3600, must-revalidate');
 
 $C1='rgb('.$C1R.','.$C1V.','.$C1B.')';

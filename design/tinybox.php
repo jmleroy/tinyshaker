@@ -1,4 +1,4 @@
-<?php require_once('../config.txt'); ?>
+<?php require_once('../config.inc.php'); ?>
 <code>
 &lt;script type="text/javascript" src="<?php echo $Url; ?>design/tinybox.js"&gt;&lt;/script&gt;<br/>
 &lt;style type="text/css"&gt;<br/>

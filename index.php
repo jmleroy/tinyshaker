@@ -1,11 +1,11 @@
 <?php
-require_once('config.txt');
+require_once('config.inc.php');
 if (isset($_GET["lang"])) { $Lang=$_GET["lang"];}
 include('lang/langs.txt');
 include('lang/'.$LLang.'.txt');
 
 $rep = "episodes/".$Lang."/";
-$dir = opendir($rep); 
+$dir = opendir($rep);
 $i=0;
 $episode = array();
 while (false !== ($d = readdir($dir))) {
@@ -26,10 +26,10 @@ $PageUrl="http://".$_SERVER['HTTP_HOST'].substr($_SERVER['REQUEST_URI'], 0, strp
 $PageUrl="http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
 }
 
-if(!function_exists('stripos')) { 
-function stripos($haystack, $needle, $offset = 0) { 
-return strpos(strtolower($haystack), strtolower($needle), $offset); 
-} 
+if(!function_exists('stripos')) {
+function stripos($haystack, $needle, $offset = 0) {
+return strpos(strtolower($haystack), strtolower($needle), $offset);
+}
 }
 
 if ( $directory = opendir($rep."/".$current_episode."/") ) {
@@ -48,7 +48,7 @@ if ( $directory = opendir($rep."/".$current_episode."/") ) {
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title><?php echo $episode[$ep].' - '.$Title; ?></title>
 <link rel="stylesheet" type="text/css" href="design/style.php" />
-<link rel="image_src" href="<?php echo $FacebookImageUrl; ?>" type="image/x-icon" />
+<link rel="image_src" href="<?php echo $Url.$FacebookImageUrl; ?>" type="image/x-icon" />
 <meta name="description" content="<?php echo $Description; ?>">
 <link rel="alternate" type="application/rss+xml" title="<?php echo $Title; ?>" href="rss.php?lang=<?php echo $Lang; ?>" />
 <meta name="viewport" content="width=<?php echo $ImageWidth+40; ?>, user-scalable=no" />
@@ -60,21 +60,21 @@ if ( $directory = opendir($rep."/".$current_episode."/") ) {
 <body>
 	<?php
 	if($Tinybox==0) {
-	
+
 	echo '<div id="wrapper" style="margin-top:10px;">';
 		$NbLanguages = count($Languages);
-		if ($NbLanguages>1) { 
+		if ($NbLanguages>1) {
 		echo '<div id="languages">';
 		$i=0;
-		while($i<$NbLanguages) { 
+		while($i<$NbLanguages) {
 		if($UrlRewriting=='1') { echo '<a href="'.$Languages[$i].'-'.($ep+1).'">'.$Languages[$i].'</a> '; }
 		else { echo '<a href="?lang='.$Languages[$i].'&ep='.($ep+1).'">'.$Languages[$i].'</a> '; }
-		$i++; 
+		$i++;
 		}
 		echo '</div>';
-		} 
-		
-		if ($ShowTitle=='1') { echo '<h1>'.$episode[$ep].'</h1>'; } 
+		}
+
+		if ($ShowTitle=='1') { echo '<h1>'.$episode[$ep].'</h1>'; }
 	} else { echo '<div id="wrapper">'; }
 	?>
 	<div>
@@ -83,14 +83,14 @@ if ( $directory = opendir($rep."/".$current_episode."/") ) {
 				<?php
 				$i=0;
 				foreach ($files as $filename) {
-					if ($i==0) {$i++;} 
+					if ($i==0) {$i++;}
 					if(stripos($filename,'txt') != 0) {
 						echo '<li class="content" onclick="tbm.move(+1)"><img width="0" height="0" name="img'.$i.'" />';
 						include($filename);
 						echo '</li>';
 						$i++;
 					} else {
-						if($i==$filesnbr) { 
+						if($i==$filesnbr) {
 						echo '<li><img src="'.$filename.'" width="'.$ImageWidth.'" height="'.$ImageHeight.'" alt="'.basename($filename,strrchr($filename,'.')).'" onclick="tbm.move(+1)" /></li>';
 						} else {
 						echo '<li><script type="text/javascript">document.write("<img width=\"'.$ImageWidth.'\" height=\"'.$ImageHeight.'\" alt=\"'.basename($filename,strrchr($filename,'.')).'\" name=\"img'.$i.'\" onclick=\"tbm.move(+1)\" />")</script><noscript><img src="'.$filename.'" width="'.$ImageWidth.'" height="'.$ImageHeight.'" alt="'.basename($filename,strrchr($filename,'.')).'" /></noscript></li>';
@@ -132,12 +132,12 @@ if ( $directory = opendir($rep."/".$current_episode."/") ) {
 			if (($Support=='1')||(($Support!='0')&&($Tinybox!=0))) {
 				echo '<li onclick="tbm.pos('.$i.')" title="'.$SupportAndComment.'" class="comments"><img src="design/bubble.png" alt="'.$SupportAndComment.'" /></li>';
 			}
-			
+
 			if($Tinybox==0) {
 		?>
 	</ul>
-	<?php if(array_key_exists(($ep-1), $episode)||array_key_exists(($ep+1), $episode)) { 
-		if ($ShowTitle=='2') { echo '<h1>'.$episode[$ep].'</h1>'; } 
+	<?php if(array_key_exists(($ep-1), $episode)||array_key_exists(($ep+1), $episode)) {
+		if ($ShowTitle=='2') { echo '<h1>'.$episode[$ep].'</h1>'; }
 		echo '<hr/><ul id="episodes">';
 		if (array_key_exists(($ep-1), $episode)) { if($UrlRewriting=='1') { echo '<li id="prev"><a href="'.$Lang.'-'.$ep.'" title="'.$episode[$ep-1].'">&laquo; '.$PrevEpisode.'</a></li>'; } else { echo '<li id="prev"><a href="?lang='.$Lang.'&ep='.($ep).'" title="'.$episode[$ep-1].'">&laquo; '.$PrevEpisode.'</a></li>'; } } else { echo '<li id="prev">&nbsp;</li>'; }
 		echo '<ul class="list"><li>'.$Episodes.' : </li>';
@@ -154,17 +154,17 @@ if ( $directory = opendir($rep."/".$current_episode."/") ) {
 		<li><a href="http://twitter.com/share" class="button twitter"><?php echo $Tweet; ?></a></li>
 		<li><a href="javascript:TINY.box.show({url:'<?php echo $Url; ?>design/tinybox.php?PageUrl=<?php echo $PageUrl; ?>',width:480,height:360})" class="button website"><?php echo $Embed; ?></a></li>
 		</ul>
-		<?php 
+		<?php
 		if ($Support=='2') {
 			echo '<div id="comments"><h2>'.$Comments.'</h2><div id="fb-root"></div><script src="http://connect.facebook.net/'.$LLang.'/all.js#appId=23029976184&amp;xfbml=1"></script><fb:comments href="'.urlencode("http://".$_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"]).'" num_posts="3" width="'.($ImageWidth-40).'"></fb:comments></div>';
 		} else if ($Support=='3') {
 			echo '<div id="comments"><h2>'.$Comments.'</h2><div id="fb-root"></div><script src="http://connect.facebook.net/'.$LLang.'/all.js#appId=23029976184&amp;xfbml=1"></script><fb:comments href="'.$Url.'" num_posts="3" width="'.($ImageWidth-40).'"></fb:comments></div>';
-		} 
+		}
 			echo '<div id="credits">'.$PoweredBy.' <a href="http://julien.falgas.fr/tinyshaker">TinyShaker</a><br/>'.$Credits.'</div>';
-			
+
 		} //fin du if($Tinybox!=1)
 		?>
-	
+
 </div>
 <script type="text/javascript">
 //liste des images du dossier
@@ -176,15 +176,15 @@ var imgs = new Array(
 						if($i!=count($files)-1) {
 							echo '"'.$filename.'",';
 							$i++;
-						} else { 
+						} else {
 							echo '"'.$filename.'");last='.$i.';';
 							$i++;
 						}
-					} else { 
+					} else {
 						if($i!=count($files)-1) {
 							echo '"design/pixel.png",';
 							$i++;
-						} else { 
+						} else {
 							echo '"design/pixel.png");last='.$i.';';
 							$i++;
 						}
@@ -192,7 +192,7 @@ var imgs = new Array(
 				}
 				if ((array_key_exists(($ep-1), $episode))&&($Tinybox==0)) { if($UrlRewriting=='1') { echo 'epprev="'.$Lang.'-'.($ep).'";'; } else { echo 'epprev="?lang='.$Lang.'&ep='.($ep).'";';} } else { echo 'epprev=0;';}
 				if ((array_key_exists(($ep+1), $episode))&&($Tinybox==0)) { if($UrlRewriting=='1') {  echo 'epnext="'.$Lang.'-'.($ep+2).'";'; } else { echo 'epnext="?lang='.$Lang.'&ep='.($ep+2).'";'; } } else { echo 'epnext=0;';}
-			
+
 			echo 'preload='.$Preload.';'; ?>
 var tbm=new TINY.shaker.shake('tbm',{
 	id:'slides',
