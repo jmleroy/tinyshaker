@@ -26,12 +26,6 @@ $PageUrl="http://".$_SERVER['HTTP_HOST'].substr($_SERVER['REQUEST_URI'], 0, strp
 $PageUrl="http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
 }
 
-if(!function_exists('stripos')) {
-function stripos($haystack, $needle, $offset = 0) {
-return strpos(strtolower($haystack), strtolower($needle), $offset);
-}
-}
-
 if ( $directory = opendir($rep."/".$current_episode."/") ) {
 		while ( ( $file = readdir( $directory ) ) !== false ) {
 			if($file!="."&&$file!="..") {
@@ -48,7 +42,7 @@ if ( $directory = opendir($rep."/".$current_episode."/") ) {
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title><?php echo $episode[$ep].' - '.$Title; ?></title>
 <link rel="stylesheet" type="text/css" href="design/style.php" />
-<link rel="image_src" href="<?php echo $Url.$FacebookImageUrl; ?>" type="image/x-icon" />
+<link rel="image_src" href="<?php echo $FacebookImageUrl; ?>" type="image/x-icon" />
 <meta name="description" content="<?php echo $Description; ?>">
 <link rel="alternate" type="application/rss+xml" title="<?php echo $Title; ?>" href="rss.php?lang=<?php echo $Lang; ?>" />
 <meta name="viewport" content="width=<?php echo $ImageWidth+40; ?>, user-scalable=no" />
