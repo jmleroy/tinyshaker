@@ -20,6 +20,13 @@
     "C2B": "B9",
     "HlColor": "#55BBCC",
     "Lang": "fr",
-    "Languages": ["fr", "en"],
+    "Languages": [
+        "fr",
+        "en"
+    ],
+    "LanguageCodes": {
+        "fr": "fr_FR",
+        "en": "en_US"
+    },
     "IDGoogleAnalytics": "UA-XXXXX-XX"
 }

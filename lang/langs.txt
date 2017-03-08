@@ -1,4 +1,0 @@
-<?php
-if($Lang=='fr'){$LLang='fr_FR';}
-else if($Lang=='en'){$LLang='en_US';}
-?>

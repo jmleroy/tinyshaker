@@ -1,8 +1,6 @@
 <?php
 require_once('config.inc.php');
-if (isset($_GET["lang"])) { $Lang=$_GET["lang"];}
-include('lang/langs.txt');
-include('lang/'.$LLang.'.txt');
+require_once('langs.inc.php');
 
 $rep = "episodes/".$Lang."/";
 $dir = opendir($rep);
@@ -96,13 +94,13 @@ if ( $directory = opendir($rep."/".$current_episode."/") ) {
 				<?php if (($Support=='1')||(($Support!='0')&&($Tinybox!=0))) { ?>
 				<li class="content">
 					<div id="support">
-					<a href="rss.php" class="button feed"><?php echo $Subscribe; ?></a>
-					<a href="http://www.facebook.com/share.php?u=<?php echo urlencode($PageUrl); ?>" class="button facebook"><?php echo $Share; ?></a>
-					<a href="http://twitter.com/share" class="button twitter"><?php echo $Tweet; ?></a>
-					<a href="javascript:TINY.box.show({url:'<?php echo $Url; ?>design/tinybox.php?PageUrl=<?php echo $PageUrl; ?>',width:480,height:360})" class="button website"><?php echo $Embed; ?></a>
+					<a href="rss.php" class="button feed"><?php echo _('Subscribe'); ?></a>
+					<a href="http://www.facebook.com/share.php?u=<?php echo urlencode($PageUrl); ?>" class="button facebook"><?php echo _('Share'); ?></a>
+					<a href="http://twitter.com/share" class="button twitter"><?php echo _('Tweet'); ?></a>
+					<a href="javascript:TINY.box.show({url:'<?php echo $Url; ?>design/tinybox.php?PageUrl=<?php echo $PageUrl; ?>',width:480,height:360})" class="button website"><?php echo _('Embed'); ?></a>
 					</div>
 					<div id="comments">
-					<h2><?php echo $Comments; ?></h2>
+					<h2><?php echo _('Comments'); ?></h2>
 					<div id="fb-root"></div><script src="http://connect.facebook.net/<?php echo $LLang; ?>/all.js#appId=23029976184&amp;xfbml=1"></script><fb:comments href="<?php echo urlencode("http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']); ?>" num_posts="1" width="<?php echo $ImageWidth-40; ?>"></fb:comments>
 					</div>
 				</li>
@@ -124,7 +122,7 @@ if ( $directory = opendir($rep."/".$current_episode."/") ) {
 					$i++;
 			}
 			if (($Support=='1')||(($Support!='0')&&($Tinybox!=0))) {
-				echo '<li onclick="tbm.pos('.$i.')" title="'.$SupportAndComment.'" class="comments"><img src="design/bubble.png" alt="'.$SupportAndComment.'" /></li>';
+				echo '<li onclick="tbm.pos('.$i.')" title="'._('SupportAndComment').'" class="comments"><img src="design/bubble.png" alt="'._('SupportAndComment').'" /></li>';
 			}
 
 			if($Tinybox==0) {
@@ -133,28 +131,28 @@ if ( $directory = opendir($rep."/".$current_episode."/") ) {
 	<?php if(array_key_exists(($ep-1), $episode)||array_key_exists(($ep+1), $episode)) {
 		if ($ShowTitle=='2') { echo '<h1>'.$episode[$ep].'</h1>'; }
 		echo '<hr/><ul id="episodes">';
-		if (array_key_exists(($ep-1), $episode)) { if($UrlRewriting=='1') { echo '<li id="prev"><a href="'.$Lang.'-'.$ep.'" title="'.$episode[$ep-1].'">&laquo; '.$PrevEpisode.'</a></li>'; } else { echo '<li id="prev"><a href="?lang='.$Lang.'&ep='.($ep).'" title="'.$episode[$ep-1].'">&laquo; '.$PrevEpisode.'</a></li>'; } } else { echo '<li id="prev">&nbsp;</li>'; }
-		echo '<ul class="list"><li>'.$Episodes.' : </li>';
+		if (array_key_exists(($ep-1), $episode)) { if($UrlRewriting=='1') { echo '<li id="prev"><a href="'.$Lang.'-'.$ep.'" title="'.$episode[$ep-1].'">&laquo; '._('PrevEpisode').'</a></li>'; } else { echo '<li id="prev"><a href="?lang='.$Lang.'&ep='.($ep).'" title="'.$episode[$ep-1].'">&laquo; '._('PrevEpisode').'</a></li>'; } } else { echo '<li id="prev">&nbsp;</li>'; }
+		echo '<ul class="list"><li>'._('Episodes').' : </li>';
 		for($i=1;$i<=count($episode); $i++) { if($i!=$ep+1) { if($UrlRewriting=='1') { echo '<li>[<a href="'.$Lang.'-'.$i.'" title="'.$episode[$i-1].'">'.$i.'</a>]</li>'; } else { echo '<li>[<a href="?lang='.$Lang.'&ep='.$i.'" title="'.$episode[$i-1].'">'.$i.'</a>]</li>'; } } else { echo '<li>['.$i.']</li>'; } }
 		echo '</ul>';
-		if (array_key_exists(($ep+1), $episode)) { if($UrlRewriting=='1') { echo '<li id="next"><a href="'.$Lang.'-'.($ep+2).'" title="'.$episode[$ep+1].'">'.$NextEpisode.' &raquo;</a></li>'; } else { echo '<li id="next"><a href="?lang='.$Lang.'&ep='.($ep+2).'" title="'.$episode[$ep+1].'">'.$NextEpisode.' &raquo;</a></li>'; } } else { echo '<li id="next">&nbsp;</li>'; }
+		if (array_key_exists(($ep+1), $episode)) { if($UrlRewriting=='1') { echo '<li id="next"><a href="'.$Lang.'-'.($ep+2).'" title="'.$episode[$ep+1].'">'._('NextEpisode').' &raquo;</a></li>'; } else { echo '<li id="next"><a href="?lang='.$Lang.'&ep='.($ep+2).'" title="'.$episode[$ep+1].'">'._('NextEpisode').' &raquo;</a></li>'; } } else { echo '<li id="next">&nbsp;</li>'; }
 		echo '</ul>';
 	}
 	?>
 	<hr/>
 		<ul id="viral">
-		<li><a href="rss.php?lang=<?php echo $Lang; ?>" class="button feed"><?php echo $Subscribe; ?></a></li>
-		<li><a href="http://www.facebook.com/share.php?u=<?php echo urlencode($PageUrl); ?>" class="button facebook"><?php echo $Share; ?></a></li>
-		<li><a href="http://twitter.com/share" class="button twitter"><?php echo $Tweet; ?></a></li>
-		<li><a href="javascript:TINY.box.show({url:'<?php echo $Url; ?>design/tinybox.php?PageUrl=<?php echo $PageUrl; ?>',width:480,height:360})" class="button website"><?php echo $Embed; ?></a></li>
+		<li><a href="rss.php?lang=<?php echo $Lang; ?>" class="button feed"><?php echo _('Subscribe'); ?></a></li>
+		<li><a href="http://www.facebook.com/share.php?u=<?php echo urlencode($PageUrl); ?>" class="button facebook"><?php echo _('Share'); ?></a></li>
+		<li><a href="http://twitter.com/share" class="button twitter"><?php echo _('Tweet'); ?></a></li>
+		<li><a href="javascript:TINY.box.show({url:'<?php echo $Url; ?>design/tinybox.php?PageUrl=<?php echo $PageUrl; ?>',width:480,height:360})" class="button website"><?php echo _('Embed'); ?></a></li>
 		</ul>
 		<?php
 		if ($Support=='2') {
-			echo '<div id="comments"><h2>'.$Comments.'</h2><div id="fb-root"></div><script src="http://connect.facebook.net/'.$LLang.'/all.js#appId=23029976184&amp;xfbml=1"></script><fb:comments href="'.urlencode("http://".$_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"]).'" num_posts="3" width="'.($ImageWidth-40).'"></fb:comments></div>';
+			echo '<div id="comments"><h2>'._('Comments').'</h2><div id="fb-root"></div><script src="http://connect.facebook.net/'.$LLang.'/all.js#appId=23029976184&amp;xfbml=1"></script><fb:comments href="'.urlencode("http://".$_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"]).'" num_posts="3" width="'.($ImageWidth-40).'"></fb:comments></div>';
 		} else if ($Support=='3') {
-			echo '<div id="comments"><h2>'.$Comments.'</h2><div id="fb-root"></div><script src="http://connect.facebook.net/'.$LLang.'/all.js#appId=23029976184&amp;xfbml=1"></script><fb:comments href="'.$Url.'" num_posts="3" width="'.($ImageWidth-40).'"></fb:comments></div>';
+			echo '<div id="comments"><h2>'._('Comments').'</h2><div id="fb-root"></div><script src="http://connect.facebook.net/'.$LLang.'/all.js#appId=23029976184&amp;xfbml=1"></script><fb:comments href="'.$Url.'" num_posts="3" width="'.($ImageWidth-40).'"></fb:comments></div>';
 		}
-			echo '<div id="credits">'.$PoweredBy.' <a href="http://julien.falgas.fr/tinyshaker">TinyShaker</a><br/>'.$Credits.'</div>';
+			echo '<div id="credits">'._('PoweredBy').' <a href="http://julien.falgas.fr/tinyshaker">TinyShaker</a><br/>'.$Credits.'</div>';
 
 		} //fin du if($Tinybox!=1)
 		?>

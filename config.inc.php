@@ -34,6 +34,7 @@ $filter = array_flip(array(
     "HlColor", // Couleur de surbrillance
     "Lang", // langue par défaut, remplacer par 'en' pour publier en anglais
     "Languages", // langues disponibles
+    "LanguageCodes", // codes langues disponibles
     "IDGoogleAnalytics",
 ));
 
