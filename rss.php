@@ -47,7 +47,7 @@ foreach($items as $item) {
 	<title><?php echo $d ?></title>
 	<link><?php echo $link ?></link>
 	<guid><?php echo $link ?></guid>
-	<description><![CDATA[<a href="<?php echo $link ?>"><img src="<?php echo $linkFile ?>"><br>Accéder à l'épisode <em><?php echo $d ?></em></a>]]></description>
+	<description><![CDATA[<a href="<?php echo $link ?>"><img src="<?php echo $linkFile ?>"><br><?php echo _('GoToEpisode', $d) ?></a>]]></description>
 	<pubDate><?php echo $pubDate ?></pubDate>
 	</item>
 <?php
