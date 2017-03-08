@@ -9,7 +9,9 @@ $translations = json_decode($translationMap, true);
 
 function _($key) {
     global $translations;
-    return array_key_exists($key, $translations) ? $translations[$key] : $key;
+    $args = func_get_args();
+    array_shift($args);
+    return array_key_exists($key, $translations) ? vsprintf($translations[$key], $args) : $key;
 }
 
 unset($translationMap);
