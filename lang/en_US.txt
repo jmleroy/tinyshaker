@@ -1,0 +1,12 @@
+<?php
+$Episodes="episodes";
+$PrevEpisode="prev episode";
+$NextEpisode="next episode";
+$Subscribe="Subscribe";
+$Share="Share";
+$Tweet="Tweet";
+$Embed="Embed";
+$Comments="Comments";
+$SupportAndComment="Support &amp; Comment";
+$PoweredBy="Powered by";
+?>

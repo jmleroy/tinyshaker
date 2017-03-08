@@ -1,0 +1,5 @@
+SetEnv PHP_VER 5
+RewriteEngine On
+RewriteBase /
+RewriteRule ^([A-Za-z0-9_]+)-([A-Za-z0-9]+)/?$ tinyshaker/index.php?lang=$1&ep=$2 [QSA]
+RewriteRule ^([A-Za-z0-9_]+)/?$ tinyshaker/index.php?lang=$1 [QSA]

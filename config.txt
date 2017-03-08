@@ -1,0 +1,34 @@
+﻿<?php
+$Title="Tinyshaker - JavaScript Turbo Media by JiF";
+$Url="http://julien.falgas.fr/tinyshaker/"; //adresse url se terminant par un "/"
+$FacebookImageUrl="http://julien.falgas.fr/tinyshaker/thumbnail.png";
+$Description="Script PHP/Javascript de publication en ligne de récit sous forme de diaporama.";
+
+$UrlRewriting='1'; //passer à '0' si votre hébergeur ne gère pas convenablement la réécriture d'url et que les liens entre les chapitres ne fonctionnent pas. Dans ce cas, remplacez le fichier .htaccess par "htaccess_pour_free-fr" si vous êtes hébergé chez Free.fr, ou essayez de supprimer ce fichier.
+
+$Preload='5'; //nombre d'images à précharger à partir de l'image courrante
+
+$ShowTitle='1'; //remplacer par	'0' pour n'afficher aucun titre
+		//remplacer par	'2' pour afficher le titre de l'épisode sous la jauge de lecture
+$Support='3'; 	//remplacer par	'0' pour supprimer l'écran de commentaires en fin d'épisode
+		//remplacer par	'1' pour afficher les commentaires propres à chaque épisode en fin d'épisode
+		//remplacer par	'2' pour afficher les commentaires propres à chaque épisode sous l'épisode
+$ShowUpdt='0';	//remplacer par '1' pour que les fichiers mise à jour au sein d'un épisode soient mis en valeur sur la jauge
+
+$Credits='By <a href="http://julien.falgas.fr">Julien Falgas</a>, inspired by <a href="http://www.scriptiny.com/">Michael Leigeber</a>\'s <a href="http://www.scriptiny.com/2010/09/fading-slideshow-script/">TinyFader</a><br/>Grenade design by <a href="http://www.fredboot.com">Fred Boot</a> Icons by <a href="http://paulrobertlloyd.com/">Paul Robert Lloyd</a>';
+
+$ImageWidth='800px';
+$ImageHeight='450px';
+
+$BgColor='#353435'; //couleur de fond
+$C1R='69';$C1V='68';$C1B='69'; //Code RVB de la couleur 1
+$C2R=$C1R+80;$C2V=$C1V+80;$C2B=$C1B+80; //Code RVB de la couleur 2
+$HlColor='#55BBCC'; //couleur de surbrillance
+
+$Lang="fr"; //langue par défaut, remplacer par 'en' pour publier en anglais
+
+$Languages=array('fr','en'); //langues disponibles
+
+$IDGoogleAnalytics='UA-XXXXX-XX';
+
+?>
