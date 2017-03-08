@@ -12,7 +12,7 @@ require_once('langs.inc.php');
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 <channel>
 <title><?php echo $Title ?></title>
-<link>".$Url."</link>
+<link><?php echo $Url ?></link>
 <description><?php echo $Description ?></description>
 <atom:link href="<?php echo $Url ?>rss.php?lang=<?php echo $Lang ?>" rel="self" type="application/rss+xml" />
 <?php
@@ -25,14 +25,14 @@ foreach($dir as $d) {
     if($d[0] == '.') continue;
     $pathEpisode = $path . $d . '/';
     $files = scandir($pathEpisode, SCANDIR_SORT_ASCENDING);
-    $files = array_values(array_diff($files, array('.', '..')));
-    $firstFileOfEpisode = $path . $d . '/' . $files[0];
-    $pubDateOfEpisode = filemtime($firstFileOfEpisode);
+    $firstFileOfEpisode = array_shift(array_diff($files, array('.', '..')));
+    $pathToFirstFileOfEpisode = $path . $d . '/' . $firstFileOfEpisode;
+    $pubDateOfEpisode = filemtime($pathToFirstFileOfEpisode);
     $item = array(
         'd' => $d,
         'pubDate' => date ('D, d M Y H:i:s', $pubDateOfEpisode) . ' GMT',
         'link' => $Url . ($UrlRewriting ? $Lang.'-'.$i : '?lang='.$Lang.'&amp;ep='.$i),
-        'linkFile' => $Url . $firstFileOfEpisode,
+        'linkFile' => $Url . $pathToFirstFileOfEpisode,
     );
     $items[$pubDateOfEpisode] = $item;
     $i++;
@@ -47,7 +47,7 @@ foreach($items as $item) {
 	<title><?php echo $d ?></title>
 	<link><?php echo $link ?></link>
 	<guid><?php echo $link ?></guid>
-	<description><![CDATA[<a href="<?php echo $link ?>"><img src="<?php echo $linkFile ?>"><br>Accéder à l'épisode <em><?php echo $d ?></em></a>]]></description>
+	<description><![CDATA[<a href="<?php echo $link ?>"><img src="<?php echo $linkFile ?>"><br><?php echo _('GoToEpisode', $d) ?></a>]]></description>
 	<pubDate><?php echo $pubDate ?></pubDate>
 	</item>
 <?php
