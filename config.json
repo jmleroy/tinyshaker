@@ -1,7 +1,7 @@
 {
     "Title": "Tinyshaker - JavaScript Turbo Media by JiF",
     "Url": "http://tinyshaker.local/",
-    "FacebookImageUrl": "thumbnail.png",
+    "FacebookImageUrl": "http://tinyshaker.local/thumbnail.png",
     "Description": "Script PHP/Javascript de publication en ligne de récit sous forme de diaporama.",
     "UrlRewriting": 1,
     "Preload": 5,
