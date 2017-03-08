@@ -1,55 +1,57 @@
 <?php
 
 // on détermine le type de document, ici du xml
-header ( "Content-type: application/rss+xml, application/rdf+xml;q=0.8, application/atom+xml;q=0.6, application/xml;q=0.4, text/xml;q=0.4; charset=UTF-8" ) ;
+//header('Content-Type: text/css');
+header('Content-type: application/rss+xml, application/rdf+xml;q=0.8, application/atom+xml;q=0.6, application/xml;q=0.4, text/xml;q=0.4; charset=UTF-8') ;
 
 require_once('config.inc.php');
 require_once('langs.inc.php');
 
-$rss = "<?xml version=\"1.0\" encoding=\"utf-8\" ?>" ;
-$rss .= "<rss version=\"2.0\" xmlns:atom=\"http://www.w3.org/2005/Atom\">" ;
-$rss .= "<channel>" ;
-$rss .= "<title>".$Title."</title>" ;
-$rss .= "<link>".$Url."</link>" ;
-$rss .= "<description>".$Description."</description>" ;
-$rss .= "<atom:link href=\"".$Url."rss.php?lang=".$Lang."\" rel=\"self\" type=\"application/rss+xml\" />";
+?>
+<?xml version="1.0" encoding="utf-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+<title><?php echo $Title ?></title>
+<link>".$Url."</link>
+<description><?php echo $Description ?></description>
+<atom:link href="<?php echo $Url ?>rss.php?lang=<?php echo $Lang ?>" rel="self" type="application/rss+xml" />
+<?php
+$items = array();
+$path = 'episodes/' . $Lang . '/';
+$dir = scandir($path);
+$i = 1;
 
-$rep = "episodes/".$Lang."/";
-$dir = opendir($rep);
-$i=1;
-while (false !== ($d = readdir($dir))){
-   if((is_dir($rep.$d))&&$d>'..') {
-	//$dirt = new SplFileInfo($rep."/".$d);
-	//$dirtime=date ("D, d M Y H:i:s", $dirt->getMTime());
-	if ( $directory = opendir($rep.$d."/") ) {
-					while ( ( $file = readdir( $directory ) ) !== false ) {
-						if($file!="."&&$file!="..") {
-						$files[] = $rep.$d."/".$file;
-						}
-					}
-				}
-	$dirtime=date ("D, d M Y H:i:s", filemtime($files[0]));
-	// On crée l'item avec ces données
-	$rss .= "<item>" ;
-	$rss .= "<title>".$d."</title>";
-	if ($UrlRewriting=='1') {
-	$rss .= "<link>".$Url.$Lang."-".$i."</link>" ;
-	$rss .= "<guid>".$Url.$Lang."-".$i."</guid>" ;
-	$rss .= "<description><![CDATA[<a href=\"".$Url.$Lang."-".$i."\"><img src=\"".$Url.$files[0]."\"><br>Accéder à l'épisode <em>".$d."</em></a>]]></description>" ;
-	} else {
-	$rss .= "<link>".$Url."?lang=".$Lang."&amp;ep=".$i."</link>" ;
-	$rss .= "<guid>".$Url."?lang=".$Lang."&amp;ep=".$i."</guid>" ;
-	$rss .= "<description><![CDATA[<a href=\"".$Url."?lang=".$Lang."&amp;ep=".$i."\"><img src=\"".$Url.$files[0]."\"><br>Accéder à l'épisode <em>".$d."</em></a>]]></description>" ;
-
-	}
-	$rss .= "<pubDate>".$dirtime." GMT</pubDate>" ;
-	$rss .= "</item>" ;
-	$i++;
-   }
+foreach($dir as $d) {
+    if($d[0] == '.') continue;
+    $pathEpisode = $path . $d . '/';
+    $files = scandir($pathEpisode, SCANDIR_SORT_ASCENDING);
+    $files = array_values(array_diff($files, array('.', '..')));
+    $firstFileOfEpisode = $path . $d . '/' . $files[0];
+    $pubDateOfEpisode = filemtime($firstFileOfEpisode);
+    $item = array(
+        'd' => $d,
+        'pubDate' => date ('D, d M Y H:i:s', $pubDateOfEpisode) . ' GMT',
+        'link' => $Url . ($UrlRewriting ? $Lang.'-'.$i : '?lang='.$Lang.'&amp;ep='.$i),
+        'linkFile' => $Url . $firstFileOfEpisode,
+    );
+    $items[$pubDateOfEpisode] = $item;
+    $i++;
 }
-closedir($dir);
-$rss .= "</channel>" ;
-$rss .= "</rss>" ;
 
-// On affiche le contenu XML
-echo $rss;
+krsort($items);
+
+foreach($items as $item) {
+    extract($item);
+?>
+	<item>
+	<title><?php echo $d ?></title>
+	<link><?php echo $link ?></link>
+	<guid><?php echo $link ?></guid>
+	<description><![CDATA[<a href="<?php echo $link ?>"><img src="<?php echo $linkFile ?>"><br>Accéder à l'épisode <em><?php echo $d ?></em></a>]]></description>
+	<pubDate><?php echo $pubDate ?></pubDate>
+	</item>
+<?php
+}
+?>
+</channel>
+</rss>
