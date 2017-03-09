@@ -2,17 +2,13 @@
 require_once('config.inc.php');
 require_once('langs.inc.php');
 
-$rep = "episodes/".$Lang."/";
-$dir = opendir($rep);
-$i=0;
+$path = 'episodes/' . $Lang . '/';
+$dir = scandir($path, SCANDIR_SORT_ASCENDING);
 $episode = array();
-while (false !== ($d = readdir($dir))) {
-   if((is_dir($rep.$d))&&$d>'..') {
-      $episode[$i] = $d;
-      $i++;
-   }
+foreach ($dir as $d) {
+    if ($d[0] == '.') continue;
+    $episode[] = $d;
 }
-sort($episode);
 
 if (isset($_GET["ep"])&&$_GET["ep"]>0) { $ep=$_GET["ep"]-1; } else {$ep=0;}
 if (isset($_GET["tb"])&&$_GET["tb"]>0) { $Tinybox=$_GET["tb"]; } else {$Tinybox=0;}
@@ -24,10 +20,10 @@ $PageUrl="http://".$_SERVER['HTTP_HOST'].substr($_SERVER['REQUEST_URI'], 0, strp
 $PageUrl="http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
 }
 
-if ( $directory = opendir($rep."/".$current_episode."/") ) {
+if ( $directory = opendir($path."/".$current_episode."/") ) {
 		while ( ( $file = readdir( $directory ) ) !== false ) {
 			if($file!="."&&$file!="..") {
-				$files[] = $rep."/".$current_episode."/".$file;
+				$files[] = $path."/".$current_episode."/".$file;
 			}
 		}
 	}
@@ -200,7 +196,6 @@ document.onkeydown=function(e){
 	if(code == 39) { tbm.move(+1); }
 }
 </script>
-<?php closedir($dir); ?>
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
