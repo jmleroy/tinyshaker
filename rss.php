@@ -26,7 +26,7 @@ foreach($dir as $d) {
     $pathEpisode = $path . $d . '/';
     $files = scandir($pathEpisode, SCANDIR_SORT_ASCENDING);
     $firstFileOfEpisode = array_shift(array_diff($files, array('.', '..')));
-    $pathToFirstFileOfEpisode = $path . $d . '/' . $firstFileOfEpisode;
+    $pathToFirstFileOfEpisode = $pathEpisode . $firstFileOfEpisode;
     $pubDateOfEpisode = filemtime($pathToFirstFileOfEpisode);
     $item = array(
         'd' => $d,
