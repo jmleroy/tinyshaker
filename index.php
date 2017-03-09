@@ -15,9 +15,9 @@ $Tinybox = !empty($_GET['tb']);
 $current_episode = array_key_exists($ep, $episode) ? $episode[$ep] : null;
 
 if ($Tinybox) {
-    $PageUrl="http://".$_SERVER['HTTP_HOST'].substr($_SERVER['REQUEST_URI'], 0, strpos($_SERVER['REQUEST_URI'], '?'));
+    $PageUrl = "http://".$_SERVER['HTTP_HOST'].substr($_SERVER['REQUEST_URI'], 0, strpos($_SERVER['REQUEST_URI'], '?'));
 } else {
-    $PageUrl="http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+    $PageUrl = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
 }
 
 if ($current_episode) {
@@ -45,47 +45,48 @@ if ($current_episode) {
 </style>
 </head>
 <body>
-	<?php
+<?php
 	if (!$Tinybox) {
-
         echo '<div id="wrapper" style="margin-top:10px;">';
-		$NbLanguages = count($Languages);
-		if ($NbLanguages>1) {
+		if (count($Languages) > 1) {
             echo '<div id="languages">';
-            $i=0;
-            while($i<$NbLanguages) {
-                if($UrlRewriting) { echo '<a href="'.$Languages[$i].'-'.($ep+1).'">'.$Languages[$i].'</a> '; }
-                else { echo '<a href="?lang='.$Languages[$i].'&ep='.($ep+1).'">'.$Languages[$i].'</a> '; }
-                $i++;
+            foreach ($Languages as $lg) {
+                if ($UrlRewriting) {
+                    $urlLanguage = $lg.'-'.($ep+1);
+                } else {
+                    $urlLanguage = '?lang='.$lg.'&ep='.($ep+1);
+                }
+                echo '<a href="' . $urlLanguage . '">' . $lg . '</a> ';
             }
             echo '</div>';
 		}
 
 		if ($ShowTitle=='1') { echo '<h1>'.$episode[$ep].'</h1>'; }
-	} else { echo '<div id="wrapper">'; }
-	?>
+	} else {
+        echo '<div id="wrapper">';
+    }
+?>
 	<div>
 		<div id="tbm">
 			<ul id="slides">
-				<?php
-				$i=0;
-				foreach ($files as $filename) {
-					if ($i==0) {$i++;}
-					if(stripos($filename,'txt') != 0) {
-						echo '<li class="content" onclick="tbm.move(+1)"><img width="0" height="0" name="img'.$i.'" />';
-						include($filename);
-						echo '</li>';
-						$i++;
-					} else {
-						if($i==$filesnbr) {
-						echo '<li><img src="'.$filename.'" width="'.$ImageWidth.'" height="'.$ImageHeight.'" alt="'.basename($filename,strrchr($filename,'.')).'" onclick="tbm.move(+1)" /></li>';
-						} else {
-						echo '<li><script type="text/javascript">document.write("<img width=\"'.$ImageWidth.'\" height=\"'.$ImageHeight.'\" alt=\"'.basename($filename,strrchr($filename,'.')).'\" name=\"img'.$i.'\" onclick=\"tbm.move(+1)\" />")</script><noscript><img src="'.$filename.'" width="'.$ImageWidth.'" height="'.$ImageHeight.'" alt="'.basename($filename,strrchr($filename,'.')).'" /></noscript></li>';
-						}
-						$i++;
-					}
-				}
-				?>
+<?php
+    $i = 1;
+    foreach ($files as $filename) {
+        if (stripos($filename,'txt') != 0) {
+            echo '<li class="content" onclick="tbm.move(+1)"><img width="0" height="0" name="img'.$i.'" />';
+            include($filename);
+            echo '</li>';
+            $i++;
+        } else {
+            if ($i == $filesnbr) {
+                echo '<li><img src="'.$filename.'" width="'.$ImageWidth.'" height="'.$ImageHeight.'" alt="'.basename($filename,strrchr($filename,'.')).'" onclick="tbm.move(+1)" /></li>';
+            } else {
+                echo '<li><script type="text/javascript">document.write("<img width=\"'.$ImageWidth.'\" height=\"'.$ImageHeight.'\" alt=\"'.basename($filename,strrchr($filename,'.')).'\" name=\"img'.$i.'\" onclick=\"tbm.move(+1)\" />")</script><noscript><img src="'.$filename.'" width="'.$ImageWidth.'" height="'.$ImageHeight.'" alt="'.basename($filename,strrchr($filename,'.')).'" /></noscript></li>';
+            }
+            $i++;
+        }
+    }
+?>
 				<?php if ($Support=='1' || ($Support != '0' && $Tinybox)): ?>
 				<li class="content">
 					<div id="support">
