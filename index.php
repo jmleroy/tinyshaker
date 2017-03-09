@@ -10,24 +10,23 @@ foreach ($dir as $d) {
     $episode[] = $d;
 }
 
-if (isset($_GET["ep"])&&$_GET["ep"]>0) { $ep=$_GET["ep"]-1; } else {$ep=0;}
-if (isset($_GET["tb"])&&$_GET["tb"]>0) { $Tinybox=$_GET["tb"]; } else {$Tinybox=0;}
-$current_episode=$episode[$ep];
+$ep = (!empty($_GET['ep']) && is_int($_GET['ep']) && $_GET['ep'] < count($episode)) ? $_GET['ep'] - 1 : 0;
+$Tinybox = !empty($_GET['tb']);
+$current_episode = array_key_exists($ep, $episode) ? $episode[$ep] : null;
 
-if (isset($_GET["tb"])) {
-$PageUrl="http://".$_SERVER['HTTP_HOST'].substr($_SERVER['REQUEST_URI'], 0, strpos($_SERVER['REQUEST_URI'], '?'));
+if ($Tinybox) {
+    $PageUrl="http://".$_SERVER['HTTP_HOST'].substr($_SERVER['REQUEST_URI'], 0, strpos($_SERVER['REQUEST_URI'], '?'));
 } else {
-$PageUrl="http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+    $PageUrl="http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
 }
 
-if ( $directory = opendir($path."/".$current_episode."/") ) {
-		while ( ( $file = readdir( $directory ) ) !== false ) {
-			if($file!="."&&$file!="..") {
-				$files[] = $path."/".$current_episode."/".$file;
-			}
-		}
+if ($current_episode) {
+    $pathCurrentEpisode = $path . '/' . $current_episode . '/';
+    $directory = scandir($pathCurrentEpisode, SCANDIR_SORT_ASCENDING);
+	foreach ($directory as $file) {
+        if($file[0] == '.') continue;
+        $files[] = $pathCurrentEpisode . $file;
 	}
-	sort($files);
 	$filesnbr = count($files);
 ?>
 <!DOCTYPE html>
@@ -47,19 +46,19 @@ if ( $directory = opendir($path."/".$current_episode."/") ) {
 </head>
 <body>
 	<?php
-	if($Tinybox==0) {
+	if (!$Tinybox) {
 
-	echo '<div id="wrapper" style="margin-top:10px;">';
+        echo '<div id="wrapper" style="margin-top:10px;">';
 		$NbLanguages = count($Languages);
 		if ($NbLanguages>1) {
-		echo '<div id="languages">';
-		$i=0;
-		while($i<$NbLanguages) {
-		if($UrlRewriting=='1') { echo '<a href="'.$Languages[$i].'-'.($ep+1).'">'.$Languages[$i].'</a> '; }
-		else { echo '<a href="?lang='.$Languages[$i].'&ep='.($ep+1).'">'.$Languages[$i].'</a> '; }
-		$i++;
-		}
-		echo '</div>';
+            echo '<div id="languages">';
+            $i=0;
+            while($i<$NbLanguages) {
+                if($UrlRewriting) { echo '<a href="'.$Languages[$i].'-'.($ep+1).'">'.$Languages[$i].'</a> '; }
+                else { echo '<a href="?lang='.$Languages[$i].'&ep='.($ep+1).'">'.$Languages[$i].'</a> '; }
+                $i++;
+            }
+            echo '</div>';
 		}
 
 		if ($ShowTitle=='1') { echo '<h1>'.$episode[$ep].'</h1>'; }
@@ -87,7 +86,7 @@ if ( $directory = opendir($path."/".$current_episode."/") ) {
 					}
 				}
 				?>
-				<?php if (($Support=='1')||(($Support!='0')&&($Tinybox!=0))) { ?>
+				<?php if ($Support=='1' || ($Support != '0' && $Tinybox)): ?>
 				<li class="content">
 					<div id="support">
 					<a href="rss.php" class="button feed"><?php echo _('Subscribe'); ?></a>
@@ -100,7 +99,7 @@ if ( $directory = opendir($path."/".$current_episode."/") ) {
 					<div id="fb-root"></div><script src="http://connect.facebook.net/<?php echo $LLang; ?>/all.js#appId=23029976184&amp;xfbml=1"></script><fb:comments href="<?php echo urlencode("http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']); ?>" num_posts="1" width="<?php echo $ImageWidth-40; ?>"></fb:comments>
 					</div>
 				</li>
-				<?php } ?>
+            <?php endif ?>
 			</ul>
 		</div>
 	</div>
@@ -117,21 +116,21 @@ if ( $directory = opendir($path."/".$current_episode."/") ) {
 					echo '<li onclick="tbm.pos('.$i.')" title="'.date("d/m/Y", filemtime($filename)).' : '.basename($filename,strrchr($filename,'.')).'" class="'.$updt.' '.$first.'">'.$updt_txt.'</li>';
 					$i++;
 			}
-			if (($Support=='1')||(($Support!='0')&&($Tinybox!=0))) {
+			if ($Support=='1' || ($Support != '0' && $Tinybox)) {
 				echo '<li onclick="tbm.pos('.$i.')" title="'._('SupportAndComment').'" class="comments"><img src="design/bubble.png" alt="'._('SupportAndComment').'" /></li>';
 			}
 
-			if($Tinybox==0) {
+			if (!$Tinybox) {
 		?>
 	</ul>
 	<?php if(array_key_exists(($ep-1), $episode)||array_key_exists(($ep+1), $episode)) {
 		if ($ShowTitle=='2') { echo '<h1>'.$episode[$ep].'</h1>'; }
 		echo '<hr/><ul id="episodes">';
-		if (array_key_exists(($ep-1), $episode)) { if($UrlRewriting=='1') { echo '<li id="prev"><a href="'.$Lang.'-'.$ep.'" title="'.$episode[$ep-1].'">&laquo; '._('PrevEpisode').'</a></li>'; } else { echo '<li id="prev"><a href="?lang='.$Lang.'&ep='.($ep).'" title="'.$episode[$ep-1].'">&laquo; '._('PrevEpisode').'</a></li>'; } } else { echo '<li id="prev">&nbsp;</li>'; }
+		if (array_key_exists(($ep-1), $episode)) { if($UrlRewriting) { echo '<li id="prev"><a href="'.$Lang.'-'.$ep.'" title="'.$episode[$ep-1].'">&laquo; '._('PrevEpisode').'</a></li>'; } else { echo '<li id="prev"><a href="?lang='.$Lang.'&ep='.($ep).'" title="'.$episode[$ep-1].'">&laquo; '._('PrevEpisode').'</a></li>'; } } else { echo '<li id="prev">&nbsp;</li>'; }
 		echo '<ul class="list"><li>'._('Episodes').' : </li>';
-		for($i=1;$i<=count($episode); $i++) { if($i!=$ep+1) { if($UrlRewriting=='1') { echo '<li>[<a href="'.$Lang.'-'.$i.'" title="'.$episode[$i-1].'">'.$i.'</a>]</li>'; } else { echo '<li>[<a href="?lang='.$Lang.'&ep='.$i.'" title="'.$episode[$i-1].'">'.$i.'</a>]</li>'; } } else { echo '<li>['.$i.']</li>'; } }
+		for($i=1;$i<=count($episode); $i++) { if($i!=$ep+1) { if($UrlRewriting) { echo '<li>[<a href="'.$Lang.'-'.$i.'" title="'.$episode[$i-1].'">'.$i.'</a>]</li>'; } else { echo '<li>[<a href="?lang='.$Lang.'&ep='.$i.'" title="'.$episode[$i-1].'">'.$i.'</a>]</li>'; } } else { echo '<li>['.$i.']</li>'; } }
 		echo '</ul>';
-		if (array_key_exists(($ep+1), $episode)) { if($UrlRewriting=='1') { echo '<li id="next"><a href="'.$Lang.'-'.($ep+2).'" title="'.$episode[$ep+1].'">'._('NextEpisode').' &raquo;</a></li>'; } else { echo '<li id="next"><a href="?lang='.$Lang.'&ep='.($ep+2).'" title="'.$episode[$ep+1].'">'._('NextEpisode').' &raquo;</a></li>'; } } else { echo '<li id="next">&nbsp;</li>'; }
+		if (array_key_exists(($ep+1), $episode)) { if($UrlRewriting) { echo '<li id="next"><a href="'.$Lang.'-'.($ep+2).'" title="'.$episode[$ep+1].'">'._('NextEpisode').' &raquo;</a></li>'; } else { echo '<li id="next"><a href="?lang='.$Lang.'&ep='.($ep+2).'" title="'.$episode[$ep+1].'">'._('NextEpisode').' &raquo;</a></li>'; } } else { echo '<li id="next">&nbsp;</li>'; }
 		echo '</ul>';
 	}
 	?>
@@ -169,6 +168,7 @@ var imgs = new Array(
 							$i++;
 						}
 					} else {
+	sort($files);
 						if($i!=count($files)-1) {
 							echo '"design/pixel.png",';
 							$i++;
@@ -178,10 +178,11 @@ var imgs = new Array(
 						}
 					}
 				}
-				if ((array_key_exists(($ep-1), $episode))&&($Tinybox==0)) { if($UrlRewriting=='1') { echo 'epprev="'.$Lang.'-'.($ep).'";'; } else { echo 'epprev="?lang='.$Lang.'&ep='.($ep).'";';} } else { echo 'epprev=0;';}
-				if ((array_key_exists(($ep+1), $episode))&&($Tinybox==0)) { if($UrlRewriting=='1') {  echo 'epnext="'.$Lang.'-'.($ep+2).'";'; } else { echo 'epnext="?lang='.$Lang.'&ep='.($ep+2).'";'; } } else { echo 'epnext=0;';}
+				if ((array_key_exists(($ep-1), $episode))&& !$Tinybox) { if($UrlRewriting) { echo 'epprev="'.$Lang.'-'.($ep).'";'; } else { echo 'epprev="?lang='.$Lang.'&ep='.($ep).'";';} } else { echo 'epprev=0;';}
+				if ((array_key_exists(($ep+1), $episode))&& !$Tinybox) { if($UrlRewriting) { echo 'epnext="'.$Lang.'-'.($ep+2).'";'; } else { echo 'epnext="?lang='.$Lang.'&ep='.($ep+2).'";'; } } else { echo 'epnext=0;';}
 
-			echo 'preload='.$Preload.';'; ?>
+			echo 'preload='.$Preload.';';
+?>
 var tbm=new TINY.shaker.shake('tbm',{
 	id:'slides',
 	navid:'pagination',
@@ -211,3 +212,5 @@ document.onkeydown=function(e){
 </script>
 </body>
 </html>
+<?php
+}
