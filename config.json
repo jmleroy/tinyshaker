@@ -12,12 +12,7 @@
     "ImageWidth": "800px",
     "ImageHeight": "450px",
     "BgColor": "#353435",
-    "C1R": "69",
-    "C1V": "68",
-    "C1B": "69",
-    "C2R": "B9",
-    "C2V": "B8",
-    "C2B": "B9",
+    "Color": "#454445",
     "HlColor": "#55BBCC",
     "Lang": "fr",
     "Languages": [

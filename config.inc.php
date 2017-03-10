@@ -23,14 +23,7 @@ $filter = array_flip(array(
     "ImageWidth",
     "ImageHeight",
     "BgColor",      // couleur de fond
-    // Code RVB de la couleur 1
-    "C1R",
-    "C1V",
-    "C1B",
-    // Code RVB de la couleur 2
-    "C2R",
-    "C2V",
-    "C2B",
+    "Color",        // couleur principale
     "HlColor", // Couleur de surbrillance
     "Lang", // langue par défaut, remplacer par 'en' pour publier en anglais
     "Languages", // langues disponibles

@@ -2,17 +2,52 @@
 require_once('../config.inc.php');
 //header('Cache-Control: max-age=3600, must-revalidate');
 
-$C1='rgb('.$C1R.','.$C1V.','.$C1B.')';
-$C1a='rgb('.($C1R+6).','.($C1V+6).','.($C1B+6).')';
-$C1b='rgb('.($C1R-6).','.($C1V-6).','.($C1B-6).')';
-$C2='rgb('.$C2R.','.$C2V.','.$C2B.')';
-$C2b='rgb('.($C2R+90).','.($C2V+90).','.($C2B+90).')';
+/**
+ * get color with difference
+ * @param string $hexStr hexadecimal string
+ * @param int $diff
+ * @return array|bool
+ */
+function getColor($hexStr, $diff = 0) {
+    if($diff > 255) {
+        $diff = 255;
+    }
+    $color = preg_replace('/[^0-9A-Fa-f]/', '', $hexStr);
+
+    if (strlen($color) == 3) {
+        $color = $color[0].$color[0].$color[1].$color[1].$color[2].$color[2];
+    }
+
+    if (strlen($color) == 6) {
+        $rgb = str_split($color, 2);
+        $ret = 0;
+        foreach($rgb as $i => $c) {
+            $c = hexdec($c) + $diff;
+            if($c > 255) {
+                $c = 255;
+            } elseif($c < 1) {
+                $c = 0;
+            }
+            $ret += $c * pow(256, (2 - $i));
+        }
+
+        return sprintf("#%'06X", $ret);
+    }
+
+    return '#000000';
+}
+
+$Color1 = getColor($Color);
+$Color1Lighter = getColor($Color, 6);
+$Color1Darker = getColor($Color, -6);
+$Color2 = getColor($Color, 80);
+$Color2Alt = getColor($Color, 170);
 ?>
 * {margin:0; padding:0}
-body {background:<?php echo $BgColor; ?>;font-family:Verdana,sans-serif;color:<?php echo $C2; ?>;}
-a {color:<?php echo $C2b; ?>;text-decoration:none;}
+body {background:<?php echo $BgColor; ?>;font-family:Verdana,sans-serif;color:<?php echo $Color2; ?>;}
+a {color:<?php echo $Color2Alt; ?>;text-decoration:none;}
 a:hover{text-decoration:underline;color:<?php echo $HlColor; ?>;}
-h1 {color:<?php echo $C2b; ?>;margin: 0 0 5px 0;}
+h1 {color:<?php echo $Color2Alt; ?>;margin: 0 0 5px 0;}
 
 #languages {font-size:.8em; text-align: right;float:right;}
 
@@ -28,17 +63,17 @@ background-image: -webkit-gradient(
     linear,
     left bottom,
     left top,
-    color-stop(0, <?php echo $C1a; ?>),
-    color-stop(0.9, <?php echo $C1; ?>),
-    color-stop(0.1, <?php echo $C1b; ?>)
+    color-stop(0, <?php echo $Color1Lighter; ?>),
+    color-stop(0.9, <?php echo $Color1; ?>),
+    color-stop(0.1, <?php echo $Color1Darker; ?>)
 );
 background-image: -moz-linear-gradient(
     center bottom,
-    <?php echo $C1a; ?> 0%,
-    <?php echo $C1; ?> 90%,
-    <?php echo $C1b; ?> 10%
+    <?php echo $Color1Lighter; ?> 0%,
+    <?php echo $Color1; ?> 90%,
+    <?php echo $Color1Darker; ?> 10%
 );
-background-color: <?php echo $C1; ?>;
+background-color: <?php echo $Color1; ?>;
 }
 .pagination li {cursor:pointer;display:table-cell;text-align:center;font-weight:bold;border-color:transparent;border-width:1px 0;border-style:solid;height:16px;}
 .pagination li:hover {border-color:<?php echo $HlColor; ?>;}
@@ -79,23 +114,23 @@ background-image: -webkit-gradient(
     linear,
     left bottom,
     left top,
-    color-stop(0, <?php echo $C2b; ?>),
-    color-stop(0.9, <?php echo $C2; ?>),
-    color-stop(0.1, <?php echo $C2b; ?>)
+    color-stop(0, <?php echo $Color2Alt; ?>),
+    color-stop(0.9, <?php echo $Color2; ?>),
+    color-stop(0.1, <?php echo $Color2Alt; ?>)
 );
 background-image: -moz-linear-gradient(
     center bottom,
-    <?php echo $C2b; ?> 0%,
-    <?php echo $C2; ?> 90%,
-    <?php echo $C2b; ?> 10%
+    <?php echo $Color2Alt; ?> 0%,
+    <?php echo $Color2; ?> 90%,
+    <?php echo $Color2Alt; ?> 10%
 );
-background-color: <?php echo $C2; ?>;
+background-color: <?php echo $Color2; ?>;
 }
 li.new {color:<?php echo $HlColor; ?>;}
 
 li.content { width:<?php echo $ImageWidth; ?>; height:<?php echo $ImageHeight; ?>; overflow:auto;}
 
-hr{ margin: 16px 0; border: 1px dashed <?php echo $C2; ?>; border-width:1px 0 0 0;color: transparent; background-color: transparent; height: 1px;}
+hr{ margin: 16px 0; border: 1px dashed <?php echo $Color2; ?>; border-width:1px 0 0 0;color: transparent; background-color: transparent; height: 1px;}
 
 #episodes {list-style:none;width:100%;margin-top:5px;display:table;}
 #episodes li {display:table-cell;font-size:.8em;width:150px;}
@@ -113,7 +148,7 @@ hr{ margin: 16px 0; border: 1px dashed <?php echo $C2; ?>; border-width:1px 0 0 
 #viral .twitter { background:url(twitter.png) no-repeat left;}
 #viral .website{ background:url(website.png) no-repeat left;}
 
-#comments {clear:both;background:#F2F2F2;border:<?php echo $C2; ?> 5px solid;padding:5px; height:<?php echo (substr($ImageHeight, 0, -2)-100).'px'; ?>;overflow:auto;}
+#comments {clear:both;background:#F2F2F2;border:<?php echo $Color2; ?> 5px solid;padding:5px; height:<?php echo (substr($ImageHeight, 0, -2)-100).'px'; ?>;overflow:auto;}
 
 #support { margin: 0 auto 0 auto; width:480px;}
 #support .button { padding: 50px 0 10px 0; width: 120px; display:block; float:left; text-align:center;}
