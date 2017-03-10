@@ -87,7 +87,7 @@ if ($current_episode) {
         }
     }
 ?>
-				<?php if ($Support=='1' || ($Support != '0' && $Tinybox)): ?>
+				<?php if ($Support == '1' || ($Support != '0' && $Tinybox)): ?>
 				<li class="content">
 					<div id="support">
 					<a href="rss.php" class="button feed"><?php echo _('Subscribe'); ?></a>
@@ -105,36 +105,85 @@ if ($current_episode) {
 		</div>
 	</div>
 	<ul id="pagination" class="pagination">
-		<?php
-			$i=0;
-			$t=0;
-			$ft1=filemtime($files[0]);
-			foreach ($files as $filename) {$ft=filemtime($filename);if ($ft>$t){$t=$ft;}}
-			foreach ($files as $filename) {
-					if(((filemtime($filename)>($t-3600))&&(filemtime($filename)>($ft1+3600))&&($ShowUpdt=='1'))||(strpos($filename, '_new') !== false)){$updt='new';}else{$updt='&nbsp;';}
-					if($updt=='new'){$updt_txt='&bull;';}else{$updt_txt='';}
-					if($i==0){$first='first';}else if($i==$filesnbr-1){$first='last';}else{$first='';}
-					echo '<li onclick="tbm.pos('.$i.')" title="'.date("d/m/Y", filemtime($filename)).' : '.basename($filename,strrchr($filename,'.')).'" class="'.$updt.' '.$first.'">'.$updt_txt.'</li>';
-					$i++;
-			}
-			if ($Support=='1' || ($Support != '0' && $Tinybox)) {
-				echo '<li onclick="tbm.pos('.$i.')" title="'._('SupportAndComment').'" class="comments"><img src="design/bubble.png" alt="'._('SupportAndComment').'" /></li>';
-			}
+<?php
+    $t = 0;
+    $ft1 = filemtime($files[0]);
+    foreach ($files as $filename) {
+        $ft = filemtime($filename);
+        if ($ft > $t) { $t = $ft; }
+    }
 
-			if (!$Tinybox) {
-		?>
+$i = 0;
+    foreach ($files as $filename) {
+        $ft = filemtime($filename);
+        if ((($ft > ($t-3600)) && ($ft>($ft1+3600)) && ($ShowUpdt=='1')) || (strpos($filename, '_new') !== false)) {
+            $updt = 'new';
+            $updt_txt = '&bull;';
+        } else {
+            $updt = '&nbsp;';
+            $updt_txt = '';
+        }
+
+        if ($i == 0) {
+            $first = 'first';
+        } else if($i == $filesnbr-1) {
+            $first = 'last';
+        } else {
+            $first = '';
+        }
+
+        echo '<li onclick="tbm.pos('.$i.')" title="'.date("d/m/Y", $ft).' : '.basename($filename,strrchr($filename,'.')).'" class="'.$updt.' '.$first.'">'.$updt_txt.'</li>';
+        $i++;
+    }
+    if ($Support == '1' || ($Support != '0' && $Tinybox)) {
+        echo '<li onclick="tbm.pos('.$i.')" title="'._('SupportAndComment').'" class="comments"><img src="design/bubble.png" alt="'._('SupportAndComment').'" /></li>';
+    }
+
+    if (!$Tinybox) {
+?>
 	</ul>
-	<?php if(array_key_exists(($ep-1), $episode)||array_key_exists(($ep+1), $episode)) {
-		if ($ShowTitle=='2') { echo '<h1>'.$episode[$ep].'</h1>'; }
-		echo '<hr/><ul id="episodes">';
-		if (array_key_exists(($ep-1), $episode)) { if($UrlRewriting) { echo '<li id="prev"><a href="'.$Lang.'-'.$ep.'" title="'.$episode[$ep-1].'">&laquo; '._('PrevEpisode').'</a></li>'; } else { echo '<li id="prev"><a href="?lang='.$Lang.'&ep='.($ep).'" title="'.$episode[$ep-1].'">&laquo; '._('PrevEpisode').'</a></li>'; } } else { echo '<li id="prev">&nbsp;</li>'; }
-		echo '<ul class="list"><li>'._('Episodes').' : </li>';
-		for($i=1;$i<=count($episode); $i++) { if($i!=$ep+1) { if($UrlRewriting) { echo '<li>[<a href="'.$Lang.'-'.$i.'" title="'.$episode[$i-1].'">'.$i.'</a>]</li>'; } else { echo '<li>[<a href="?lang='.$Lang.'&ep='.$i.'" title="'.$episode[$i-1].'">'.$i.'</a>]</li>'; } } else { echo '<li>['.$i.']</li>'; } }
-		echo '</ul>';
-		if (array_key_exists(($ep+1), $episode)) { if($UrlRewriting) { echo '<li id="next"><a href="'.$Lang.'-'.($ep+2).'" title="'.$episode[$ep+1].'">'._('NextEpisode').' &raquo;</a></li>'; } else { echo '<li id="next"><a href="?lang='.$Lang.'&ep='.($ep+2).'" title="'.$episode[$ep+1].'">'._('NextEpisode').' &raquo;</a></li>'; } } else { echo '<li id="next">&nbsp;</li>'; }
-		echo '</ul>';
-	}
-	?>
+<?php
+        if (array_key_exists(($ep-1), $episode) || array_key_exists(($ep+1), $episode)) {
+            if ($ShowTitle == '2') {
+                echo '<h1>'.$episode[$ep].'</h1>';
+            }
+            echo '<hr/><ul id="episodes">';
+            if (array_key_exists(($ep-1), $episode)) {
+                if($UrlRewriting) {
+                    echo '<li id="prev"><a href="'.$Lang.'-'.$ep.'" title="'.$episode[$ep-1].'">&laquo; '._('PrevEpisode').'</a></li>';
+                } else {
+                    echo '<li id="prev"><a href="?lang='.$Lang.'&ep='.($ep).'" title="'.$episode[$ep-1].'">&laquo; '._('PrevEpisode').'</a></li>';
+                }
+            } else {
+                echo '<li id="prev">&nbsp;</li>';
+            }
+            echo '<ul class="list"><li>'._('Episodes').' : </li>';
+            $i = 1;
+            foreach ($episode as $e) {
+                if ($i != $ep+1) {
+                    if ($UrlRewriting) {
+                        echo '<li>[<a href="'.$Lang.'-'.$i.'" title="'.$episode[$i-1].'">'.$i.'</a>]</li>';
+                    } else {
+                        echo '<li>[<a href="?lang='.$Lang.'&ep='.$i.'" title="'.$episode[$i-1].'">'.$i.'</a>]</li>';
+                    }
+                } else {
+                    echo '<li>['.$i.']</li>';
+                }
+                $i++;
+            }
+            echo '</ul>'; // end of ul.list
+            if (array_key_exists(($ep+1), $episode)) {
+                if($UrlRewriting) {
+                    echo '<li id="next"><a href="'.$Lang.'-'.($ep+2).'" title="'.$episode[$ep+1].'">'._('NextEpisode').' &raquo;</a></li>';
+                } else {
+                    echo '<li id="next"><a href="?lang='.$Lang.'&ep='.($ep+2).'" title="'.$episode[$ep+1].'">'._('NextEpisode').' &raquo;</a></li>';
+                }
+            } else {
+                echo '<li id="next">&nbsp;</li>';
+            }
+            echo '</ul>'; // end of ul#episodes
+        }
+?>
 	<hr/>
 		<ul id="viral">
 		<li><a href="rss.php?lang=<?php echo $Lang; ?>" class="button feed"><?php echo _('Subscribe'); ?></a></li>
@@ -142,47 +191,59 @@ if ($current_episode) {
 		<li><a href="http://twitter.com/share" class="button twitter"><?php echo _('Tweet'); ?></a></li>
 		<li><a href="javascript:TINY.box.show({url:'<?php echo $Url; ?>design/tinybox.php?PageUrl=<?php echo $PageUrl; ?>',width:480,height:360})" class="button website"><?php echo _('Embed'); ?></a></li>
 		</ul>
-		<?php
-		if ($Support=='2') {
-			echo '<div id="comments"><h2>'._('Comments').'</h2><div id="fb-root"></div><script src="http://connect.facebook.net/'.$LLang.'/all.js#appId=23029976184&amp;xfbml=1"></script><fb:comments href="'.urlencode("http://".$_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"]).'" num_posts="3" width="'.($ImageWidth-40).'"></fb:comments></div>';
-		} else if ($Support=='3') {
-			echo '<div id="comments"><h2>'._('Comments').'</h2><div id="fb-root"></div><script src="http://connect.facebook.net/'.$LLang.'/all.js#appId=23029976184&amp;xfbml=1"></script><fb:comments href="'.$Url.'" num_posts="3" width="'.($ImageWidth-40).'"></fb:comments></div>';
-		}
-			echo '<div id="credits">'._('PoweredBy').' <a href="http://julien.falgas.fr/tinyshaker">TinyShaker</a><br/>'.$Credits.'</div>';
-
-		} //fin du if($Tinybox!=1)
-		?>
+<?php
+        if ($Support=='2') {
+            echo '<div id="comments"><h2>'._('Comments').'</h2><div id="fb-root"></div><script src="http://connect.facebook.net/'.$LLang.'/all.js#appId=23029976184&amp;xfbml=1"></script><fb:comments href="'.urlencode("http://".$_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"]).'" num_posts="3" width="'.($ImageWidth-40).'"></fb:comments></div>';
+        } else if ($Support=='3') {
+            echo '<div id="comments"><h2>'._('Comments').'</h2><div id="fb-root"></div><script src="http://connect.facebook.net/'.$LLang.'/all.js#appId=23029976184&amp;xfbml=1"></script><fb:comments href="'.$Url.'" num_posts="3" width="'.($ImageWidth-40).'"></fb:comments></div>';
+        }
+        echo '<div id="credits">'._('PoweredBy').' <a href="http://julien.falgas.fr/tinyshaker">TinyShaker</a><br/>'.$Credits.'</div>';
+    } //fin du if($Tinybox!=1)
+?>
 
 </div>
 <script type="text/javascript">
 //liste des images du dossier
 var imgs = new Array(
 			<?php
-				$i=0;
-				foreach ($files as $filename) {
-					if(stripos($filename,'txt') == 0) {
-						if($i!=count($files)-1) {
-							echo '"'.$filename.'",';
-							$i++;
-						} else {
-							echo '"'.$filename.'");last='.$i.';';
-							$i++;
-						}
-					} else {
-	sort($files);
-						if($i!=count($files)-1) {
-							echo '"design/pixel.png",';
-							$i++;
-						} else {
-							echo '"design/pixel.png");last='.$i.';';
-							$i++;
-						}
-					}
-				}
-				if ((array_key_exists(($ep-1), $episode))&& !$Tinybox) { if($UrlRewriting) { echo 'epprev="'.$Lang.'-'.($ep).'";'; } else { echo 'epprev="?lang='.$Lang.'&ep='.($ep).'";';} } else { echo 'epprev=0;';}
-				if ((array_key_exists(($ep+1), $episode))&& !$Tinybox) { if($UrlRewriting) { echo 'epnext="'.$Lang.'-'.($ep+2).'";'; } else { echo 'epnext="?lang='.$Lang.'&ep='.($ep+2).'";'; } } else { echo 'epnext=0;';}
+    $i = 0;
+    foreach ($files as $filename) {
+        if (stripos($filename,'txt') == 0) {
+            if ($i!=count($files)-1) {
+                echo '"'.$filename.'",';
+            } else {
+                echo '"'.$filename.'");last='.$i.';';
+            }
+        } else {
+            sort($files);
+            if ($i!=count($files)-1) {
+                echo '"design/pixel.png",';
+            } else {
+                echo '"design/pixel.png");last='.$i.';';
+            }
+        }
+        $i++;
+    }
+    if ((array_key_exists(($ep-1), $episode)) && !$Tinybox) {
+        if ($UrlRewriting) {
+            echo 'epprev="'.$Lang.'-'.($ep).'";';
+        } else {
+            echo 'epprev="?lang='.$Lang.'&ep='.($ep).'";';
+        }
+    } else {
+        echo 'epprev=0;';
+    }
+    if ((array_key_exists(($ep+1), $episode)) && !$Tinybox) {
+        if ($UrlRewriting) {
+            echo 'epnext="'.$Lang.'-'.($ep+2).'";';
+        } else {
+            echo 'epnext="?lang='.$Lang.'&ep='.($ep+2).'";';
+        }
+    } else {
+        echo 'epnext=0;';
+    }
 
-			echo 'preload='.$Preload.';';
+    echo 'preload='.$Preload.';';
 ?>
 var tbm=new TINY.shaker.shake('tbm',{
 	id:'slides',
