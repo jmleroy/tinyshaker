@@ -1,4 +1,5 @@
 {
+    "PhpDateFormat": "d/m/Y",
     "GoToEpisode": "Acc&eacute;der &agrave; l'&eacute;pisode <em>%s</em>",
     "Episodes": "&eacute;pisodes",
     "PrevEpisode": "&eacute;pisode pr&eacute;c&eacute;dent",

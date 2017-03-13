@@ -106,33 +106,37 @@ if ($current_episode) {
 	</div>
 	<ul id="pagination" class="pagination">
 <?php
-    $t = 0;
-    $ft1 = filemtime($files[0]);
+    $fileMostRecentTime = 0;
+    $episodeStartTime = filemtime($files[0]);
     foreach ($files as $filename) {
         $ft = filemtime($filename);
-        if ($ft > $t) { $t = $ft; }
+        if ($ft > $fileMostRecentTime) {
+            $fileMostRecentTime = $ft;
+        }
     }
 
-$i = 0;
+    $i = 0;
+    $first = 'first';
     foreach ($files as $filename) {
         $ft = filemtime($filename);
-        if ((($ft > ($t-3600)) && ($ft>($ft1+3600)) && ($ShowUpdt=='1')) || (strpos($filename, '_new') !== false)) {
+        $formattedDate = date(_('PhpDateFormat'), $ft);
+        $fileBasename = basename($filename, strrchr($filename, '.'));
+        $fileIsFlaggedNew = (strpos($filename, '_new') !== false);
+
+        $updt = '&nbsp;';
+        $updt_txt = '';
+        if ((($ft > ($fileMostRecentTime-3600)) && ($ft>($episodeStartTime+3600)) && $ShowUpdt) || $fileIsFlaggedNew) {
             $updt = 'new';
             $updt_txt = '&bull;';
-        } else {
-            $updt = '&nbsp;';
-            $updt_txt = '';
         }
 
-        if ($i == 0) {
-            $first = 'first';
-        } else if($i == $filesnbr-1) {
+        else if($i == $filesnbr - 1) {
             $first = 'last';
         } else {
             $first = '';
         }
 
-        echo '<li onclick="tbm.pos('.$i.')" title="'.date("d/m/Y", $ft).' : '.basename($filename,strrchr($filename,'.')).'" class="'.$updt.' '.$first.'">'.$updt_txt.'</li>';
+        echo '<li onclick="tbm.pos('.$i.')" title="'.$formattedDate.' : '.$fileBasename.'" class="'.$updt.' '.$first.'">'.$updt_txt.'</li>';
         $i++;
     }
     if ($Support == '1' || ($Support != '0' && $Tinybox)) {
