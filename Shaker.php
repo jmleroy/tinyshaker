@@ -8,20 +8,27 @@ class Shaker
 
     protected $path;
     protected $episode;
+    protected $episodeFiles;
     protected $currentEpisodeKey;
     protected $tinyBox;
 
     public function init($lang)
     {
         $this->path = 'episodes/' . $lang . '/';
-        $this->loadEpisode();
         $this->loadCurrentEpisodeKey();
+        $this->loadEpisode();
+        $this->loadEpisodeFiles();
         $this->loadTinyBox();
     }
 
     public function getEpisode()
     {
         return $this->episode;
+    }
+
+    public function getEpisodeFiles()
+    {
+        return $this->episodeFiles;
     }
 
     public function getCurrentEpisodeKey()
@@ -34,19 +41,14 @@ class Shaker
         return $this->tinyBox;
     }
 
-    public function getCurrentEpisodeFileName()
+    public function getCurrentEpisodeName()
     {
         return $this->episode[$this->currentEpisodeKey];
     }
 
-    public function getCurrentEpisodeName()
-    {
-        return $this->getCurrentEpisodeFileName();
-    }
-
     public function getCurrentEpisodePath()
     {
-        return $this->path . '/' . $this->getCurrentEpisodeFileName() . '/';
+        return $this->path . $this->getCurrentEpisodeName() . '/';
     }
 
     protected function loadCurrentEpisodeKey()
@@ -63,7 +65,7 @@ class Shaker
         $dir = scandir($this->path, SCANDIR_SORT_ASCENDING);
         $episode = array();
         foreach ($dir as $d) {
-            if (!is_dir($d)) {
+            if (is_dir($this->path . $d) && $d[0] != '.') {
                 $episode[] = $d;
             }
         }
@@ -73,5 +75,18 @@ class Shaker
     protected function loadTinyBox()
     {
         $this->tinyBox = !empty($_GET['tb']);
+    }
+
+    protected function loadEpisodeFiles()
+    {
+        $files = [];
+        $directory = scandir($this->getCurrentEpisodePath(), SCANDIR_SORT_ASCENDING);
+        foreach ($directory as $file) {
+            if (!is_dir($this->getCurrentEpisodePath() . $file)) {
+                $files[] = $this->getCurrentEpisodePath() . $file;
+            }
+        }
+
+        $this->episodeFiles = $files;
     }
 }

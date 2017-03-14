@@ -8,7 +8,7 @@ $shaker = Shaker::getInstance();
 $shaker->init($Lang);
 $episode = $shaker->getEpisode();
 $ep = $shaker->getCurrentEpisodeKey();
-$current_episode = $shaker->getCurrentEpisodeFilename();
+$current_episode = $shaker->getCurrentEpisodeName();
 
 if ($shaker->isTinyBox()) {
     $PageUrl = "http://".$_SERVER['HTTP_HOST'].substr($_SERVER['REQUEST_URI'], 0, strpos($_SERVER['REQUEST_URI'], '?'));
@@ -17,12 +17,7 @@ if ($shaker->isTinyBox()) {
 }
 
 if ($current_episode) {
-    $pathCurrentEpisode = $shaker->getCurrentEpisodePath();
-    $directory = scandir($pathCurrentEpisode, SCANDIR_SORT_ASCENDING);
-	foreach ($directory as $file) {
-        if($file[0] == '.') continue;
-        $files[] = $pathCurrentEpisode . $file;
-	}
+    $files = $shaker->getEpisodeFiles();
 	$filesnbr = count($files);
 ?>
 <!DOCTYPE html>
