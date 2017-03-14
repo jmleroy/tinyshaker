@@ -2,26 +2,22 @@
 require_once('config.inc.php');
 require_once('langs.inc.php');
 
-$path = 'episodes/' . $Lang . '/';
-$dir = scandir($path, SCANDIR_SORT_ASCENDING);
-$episode = array();
-foreach ($dir as $d) {
-    if ($d[0] == '.') continue;
-    $episode[] = $d;
-}
+include_once('Shaker.php');
 
-$ep = (!empty($_GET['ep']) && is_int($_GET['ep']) && $_GET['ep'] < count($episode)) ? $_GET['ep'] - 1 : 0;
-$Tinybox = !empty($_GET['tb']);
-$current_episode = array_key_exists($ep, $episode) ? $episode[$ep] : null;
+$shaker = Shaker::getInstance();
+$shaker->init($Lang);
+$episode = $shaker->getEpisode();
+$ep = $shaker->getCurrentEpisodeKey();
+$current_episode = $shaker->getCurrentEpisodeFilename();
 
-if ($Tinybox) {
+if ($shaker->isTinyBox()) {
     $PageUrl = "http://".$_SERVER['HTTP_HOST'].substr($_SERVER['REQUEST_URI'], 0, strpos($_SERVER['REQUEST_URI'], '?'));
 } else {
     $PageUrl = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
 }
 
 if ($current_episode) {
-    $pathCurrentEpisode = $path . '/' . $current_episode . '/';
+    $pathCurrentEpisode = $shaker->getCurrentEpisodePath();
     $directory = scandir($pathCurrentEpisode, SCANDIR_SORT_ASCENDING);
 	foreach ($directory as $file) {
         if($file[0] == '.') continue;
@@ -33,7 +29,7 @@ if ($current_episode) {
 <html lang="<?php echo $Lang ?>">
 <head>
 <meta charset="utf-8">
-<title><?php echo $episode[$ep].' - '.$Title; ?></title>
+<title><?php echo $shaker->getCurrentEpisodeName().' - '.$Title; ?></title>
 <link rel="stylesheet" type="text/css" href="design/style.php" />
 <link rel="image_src" href="<?php echo $FacebookImageUrl; ?>" type="image/x-icon" />
 <meta name="description" content="<?php echo $Description; ?>">
@@ -46,7 +42,7 @@ if ($current_episode) {
 </head>
 <body>
 <?php
-	if (!$Tinybox) {
+	if (!$shaker->isTinyBox()) {
         echo '<div id="wrapper" style="margin-top:10px;">';
 		if (count($Languages) > 1) {
             echo '<div id="languages">';
@@ -61,7 +57,7 @@ if ($current_episode) {
             echo '</div>';
 		}
 
-		if ($ShowTitle=='1') { echo '<h1>'.$episode[$ep].'</h1>'; }
+		if ($ShowTitle=='1') { echo '<h1>'.$shaker->getCurrentEpisodeName().'</h1>'; }
 	} else {
         echo '<div id="wrapper">';
     }
@@ -87,7 +83,7 @@ if ($current_episode) {
         }
     }
 ?>
-				<?php if ($Support == '1' || ($Support != '0' && $Tinybox)): ?>
+				<?php if ($Support == '1' || ($Support != '0' && $shaker->isTinyBox())): ?>
 				<li class="content">
 					<div id="support">
 					<a href="rss.php" class="button feed"><?php echo _('Subscribe'); ?></a>
@@ -139,11 +135,11 @@ if ($current_episode) {
         echo '<li onclick="tbm.pos('.$i.')" title="'.$formattedDate.' : '.$fileBasename.'" class="'.$updt.' '.$first.'">'.$updt_txt.'</li>';
         $i++;
     }
-    if ($Support == '1' || ($Support != '0' && $Tinybox)) {
+    if ($Support == '1' || ($Support != '0' && $shaker->isTinyBox())) {
         echo '<li onclick="tbm.pos('.$i.')" title="'._('SupportAndComment').'" class="comments"><img src="design/bubble.png" alt="'._('SupportAndComment').'" /></li>';
     }
 
-    if (!$Tinybox) {
+    if (!$shaker->isTinyBox()) {
 ?>
 	</ul>
 <?php
@@ -202,7 +198,7 @@ if ($current_episode) {
             echo '<div id="comments"><h2>'._('Comments').'</h2><div id="fb-root"></div><script src="http://connect.facebook.net/'.$LLang.'/all.js#appId=23029976184&amp;xfbml=1"></script><fb:comments href="'.$Url.'" num_posts="3" width="'.($ImageWidth-40).'"></fb:comments></div>';
         }
         echo '<div id="credits">'._('PoweredBy').' <a href="http://julien.falgas.fr/tinyshaker">TinyShaker</a><br/>'.$Credits.'</div>';
-    } //fin du if($Tinybox!=1)
+    } //fin du if($shaker->isTinyBox()!=1)
 ?>
 
 </div>
@@ -228,7 +224,7 @@ var imgs = new Array(
         }
         $i++;
     }
-    if ((array_key_exists(($ep-1), $episode)) && !$Tinybox) {
+    if ((array_key_exists(($ep-1), $episode)) && !$shaker->isTinyBox()) {
         if ($UrlRewriting) {
             echo 'epprev="'.$Lang.'-'.($ep).'";';
         } else {
@@ -237,7 +233,7 @@ var imgs = new Array(
     } else {
         echo 'epprev=0;';
     }
-    if ((array_key_exists(($ep+1), $episode)) && !$Tinybox) {
+    if ((array_key_exists(($ep+1), $episode)) && !$shaker->isTinyBox()) {
         if ($UrlRewriting) {
             echo 'epnext="'.$Lang.'-'.($ep+2).'";';
         } else {
