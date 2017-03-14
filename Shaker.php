@@ -51,6 +51,11 @@ class Shaker
         return $this->path . $this->getCurrentEpisodeName() . '/';
     }
 
+    public function getCurrentEpisodeTitle()
+    {
+        return $this->getCurrentEpisodeName();
+    }
+
     protected function loadCurrentEpisodeKey()
     {
         $this->currentEpisodeKey = 0;

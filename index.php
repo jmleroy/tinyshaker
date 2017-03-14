@@ -24,7 +24,7 @@ if ($current_episode) {
 <html lang="<?php echo $Lang ?>">
 <head>
 <meta charset="utf-8">
-<title><?php echo $shaker->getCurrentEpisodeName().' - '.$Title; ?></title>
+<title><?php echo $shaker->getCurrentEpisodeTitle().' - '.$Title; ?></title>
 <link rel="stylesheet" type="text/css" href="design/style.php" />
 <link rel="image_src" href="<?php echo $FacebookImageUrl; ?>" type="image/x-icon" />
 <meta name="description" content="<?php echo $Description; ?>">
@@ -52,7 +52,7 @@ if ($current_episode) {
             echo '</div>';
 		}
 
-		if ($ShowTitle=='1') { echo '<h1>'.$shaker->getCurrentEpisodeName().'</h1>'; }
+		if ($ShowTitle=='1') { echo '<h1>'.$shaker->getCurrentEpisodeTitle().'</h1>'; }
 	} else {
         echo '<div id="wrapper">';
     }
