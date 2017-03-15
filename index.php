@@ -255,6 +255,7 @@ document.onkeydown=function(e){
 	if(code == 39) { tbm.move(+1); }
 }
 </script>
+<?php if(!empty($IDGoogleAnalytics)): ?>
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -268,6 +269,7 @@ document.onkeydown=function(e){
   })();
 
 </script>
+<?php endif ?>
 </body>
 </html>
 <?php
