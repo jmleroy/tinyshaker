@@ -6,9 +6,8 @@ include_once('Shaker.php');
 
 $shaker = Shaker::getInstance();
 $shaker->init($Lang);
-$episode = $shaker->getEpisode();
-$ep = $shaker->getCurrentEpisodeKey();
-$current_episode = $shaker->getCurrentEpisodeName();
+$episode = $shaker->getCurrentEpisode();
+$ep = $episode->getKey();
 
 if ($shaker->isTinyBox()) {
     $PageUrl = "http://".$_SERVER['HTTP_HOST'].substr($_SERVER['REQUEST_URI'], 0, strpos($_SERVER['REQUEST_URI'], '?'));
@@ -16,15 +15,14 @@ if ($shaker->isTinyBox()) {
     $PageUrl = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
 }
 
-if ($current_episode) {
-    $files = $shaker->getEpisodeFiles();
-	$countFiles = count($files);
+if ($episode) {
+    $files = $episode->getFiles();
 ?>
 <!DOCTYPE html>
 <html lang="<?php echo $Lang ?>">
 <head>
 <meta charset="utf-8">
-<title><?php echo $shaker->getCurrentEpisodeTitle().' - '.$Title; ?></title>
+<title><?php echo $episode->getTitle().' - '.$Title; ?></title>
 <link rel="stylesheet" type="text/css" href="design/style.php" />
 <link rel="image_src" href="<?php echo $FacebookImageUrl; ?>" type="image/x-icon" />
 <meta name="description" content="<?php echo $Description; ?>">
@@ -32,7 +30,7 @@ if ($current_episode) {
 <meta name="viewport" content="width=<?php echo $ImageWidth+40; ?>, user-scalable=no" />
 <script type="text/javascript" src="design/tinyshaker.js"></script>
 <style type="text/css">
-.pagination li { width:<?php echo (substr($ImageWidth, 0, -2) * $countFiles / 100).'px'; ?>; }
+.pagination li { width:<?php echo (substr($ImageWidth, 0, -2) * $episode->countFiles() / 100).'px'; ?>; }
 <?php if(!$shaker->isTinyBox()): ?>
 #wrapper {margin-top:10px}
 <?php endif ?>
@@ -41,8 +39,8 @@ if ($current_episode) {
 <body>
 <div id="wrapper">
 <?php
-	if (!$shaker->isTinyBox()) {
-		if (count($Languages) > 1) {
+    if (!$shaker->isTinyBox()) {
+        if (count($Languages) > 1) {
             echo '<div id="languages">';
             foreach ($Languages as $lg) {
                 if ($UrlRewriting) {
@@ -53,9 +51,11 @@ if ($current_episode) {
                 echo '<a href="' . $urlLanguage . '">' . $lg . '</a> ';
             }
             echo '</div>';
-		}
+        }
 
-		if ($ShowTitle=='1') { echo '<h1>'.$shaker->getCurrentEpisodeTitle().'</h1>'; }
+        if ($ShowTitle == '1') {
+            echo '<h1>'.$episode->getTitle().'</h1>';
+        }
     }
 ?>
 	<div>
@@ -70,7 +70,7 @@ if ($current_episode) {
             echo '</li>';
             $i++;
         } else {
-            if ($i == $countFiles) {
+            if ($i == $episode->countFiles()) {
                 echo '<li><img src="'.$file->getPathAndName().'" width="'.$ImageWidth.'" height="'.$ImageHeight.'" alt="'.$file->baseName.'" onclick="tbm.move(+1)" /></li>';
             } else {
                 echo '<li><script type="text/javascript">document.write("<img width=\"'.$ImageWidth.'\" height=\"'.$ImageHeight.'\" alt=\"'.$file->baseName.'\" name=\"img'.$i.'\" onclick=\"tbm.move(+1)\" />")</script><noscript><img src="'.$file->getPathAndName().'" width="'.$ImageWidth.'" height="'.$ImageHeight.'" alt="'.$file->baseName.'" /></noscript></li>';
@@ -123,7 +123,7 @@ if ($current_episode) {
             $updt_txt = '&bull;';
         }
 
-        if($i == $countFiles - 1) {
+        if($i == $episode->countFiles() - 1) {
             $first = 'last';
         } else {
             $first = '';
@@ -225,8 +225,8 @@ if ($current_episode) {
         }
     }
 ?>
-var imgs=<?php echo json_encode($shaker->getImageList($files)) ?>,
-	last=<?php echo ($countFiles - 1) ?>,
+var imgs=<?php echo json_encode($episode->getImageList()) ?>,
+	last=<?php echo ($episode->countFiles() - 1) ?>,
 	epprev="<?php echo $epprev ?>",
 	epnext="<?php echo $epnext ?>",
 	preload=<?php echo $Preload ?>;

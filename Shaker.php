@@ -1,122 +1,102 @@
 <?php
 include_once('Singleton.php');
-include_once('EpisodeFile.php');
+include_once('Episode.php');
 //namespace Tinyshaker;
 
 class Shaker
 {
     use Singleton;
 
-    protected $path;
-    protected $episode;
     /**
-     * @var EpisodeFile[]
+     * @var string
      */
-    protected $episodeFiles;
+    protected $path;
+    /**
+     * @var Episode[]
+     */
+    protected $episodes;
+    /**
+     * @var int
+     */
     protected $currentEpisodeKey;
+    /**
+     * @var bool
+     */
     protected $tinyBox;
 
+    /**
+     * @param string $lang
+     */
     public function init($lang)
     {
         $this->path = 'episodes/' . $lang . '/';
         $this->loadCurrentEpisodeKey();
-        $this->loadEpisode();
-        $this->loadEpisodeFiles();
+        $this->loadEpisodes();
         $this->loadTinyBox();
     }
 
-    public function getEpisode()
+    /**
+     * @return Episode[]
+     */
+    public function getEpisodes()
     {
-        return $this->episode;
+        return $this->episodes;
     }
 
     /**
-     * @return EpisodeFile[]
+     * @return Episode|null
      */
-    public function getEpisodeFiles()
+    public function getCurrentEpisode()
     {
-        return $this->episodeFiles;
+        if(array_key_exists($this->getCurrentEpisodeKey(), $this->episodes)) {
+            return $this->episodes[$this->getCurrentEpisodeKey()];
+        }
     }
 
+    /**
+     * @return int
+     */
     public function getCurrentEpisodeKey()
     {
         return $this->currentEpisodeKey;
     }
 
+    /**
+     * @return bool
+     */
     public function isTinyBox()
     {
         return $this->tinyBox;
-    }
-
-    public function getCurrentEpisodeName()
-    {
-        return $this->episode[$this->currentEpisodeKey];
-    }
-
-    public function getCurrentEpisodePath()
-    {
-        return $this->path . $this->getCurrentEpisodeName() . '/';
-    }
-
-    public function getCurrentEpisodeTitle()
-    {
-        return $this->getCurrentEpisodeName();
-    }
-
-    /**
-     * @param EpisodeFile[] $files
-     */
-    public function getImageList($files)
-    {
-        $imageList = [];
-
-        foreach ($files as $file) {
-            if ($file->isType('txt')) {
-                $imageList[] = 'design/pixel.png';
-            } else {
-                $imageList[] = $file->getPathAndName();
-            }
-        }
-
-        return $imageList;
     }
 
     protected function loadCurrentEpisodeKey()
     {
         $this->currentEpisodeKey = 0;
 
-        if (!empty($_GET['ep']) && !empty($this->episode[$_GET['ep']])) {
+        if (!empty($_GET['ep']) && !empty($this->episodes[$_GET['ep']])) {
             $this->currentEpisodeKey = $_GET['ep'] - 1;
         }
     }
 
-    protected function loadEpisode()
+    protected function loadEpisodes()
     {
         $dir = scandir($this->path, SCANDIR_SORT_ASCENDING);
-        $episode = array();
+        $episodes = array();
+        $i = 0;
+
         foreach ($dir as $d) {
             if (is_dir($this->path . $d) && $d[0] != '.') {
-                $episode[] = $d;
+                $e = new Episode($this->path, $d, $i);
+                $episodes[] = $e;
+                $i++;
             }
         }
-        $this->episode = $episode;
+
+        $this->episodes = $episodes;
     }
 
     protected function loadTinyBox()
     {
         $this->tinyBox = !empty($_GET['tb']);
-    }
-
-    protected function loadEpisodeFiles()
-    {
-        $files = [];
-        $directory = scandir($this->getCurrentEpisodePath(), SCANDIR_SORT_ASCENDING);
-        foreach ($directory as $file) {
-            if (!is_dir($this->getCurrentEpisodePath() . $file)) {
-                $files[] = new EpisodeFile($this->getCurrentEpisodePath(), $file);
-            }
-        }
-
-        $this->episodeFiles = $files;
     }
 }
