@@ -255,21 +255,7 @@ document.onkeydown=function(e){
 	if(code == 39) { tbm.move(+1); }
 }
 </script>
-<?php if(!empty($IDGoogleAnalytics)): ?>
-<script type="text/javascript">
-
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', '<?php echo $IDGoogleAnalytics; ?>']);
-  _gaq.push(['_trackPageview']);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-
-</script>
-<?php endif ?>
+<?php include('templates/google_analytics.inc.php'); ?>
 </body>
 </html>
 <?php
