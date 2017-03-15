@@ -1,0 +1,1 @@
+<a href="http://www.facebook.com/share.php?u=<?php echo urlencode($PageUrl); ?>" class="button facebook"><?php echo _('Share'); ?></a>

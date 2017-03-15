@@ -83,7 +83,7 @@ if ($current_episode) {
 				<li class="content">
 					<div id="support">
 					<?php include('templates/link_rss.inc.php'); ?>
-					<a href="http://www.facebook.com/share.php?u=<?php echo urlencode($PageUrl); ?>" class="button facebook"><?php echo _('Share'); ?></a>
+					<?php include('templates/link_facebook_share.inc.php'); ?>
 					<a href="http://twitter.com/share" class="button twitter"><?php echo _('Tweet'); ?></a>
 					<a href="javascript:TINY.box.show({url:'<?php echo $Url; ?>design/tinybox.php?PageUrl=<?php echo $PageUrl; ?>',width:480,height:360})" class="button website"><?php echo _('Embed'); ?></a>
 					</div>
@@ -183,7 +183,7 @@ if ($current_episode) {
 	<hr/>
 		<ul id="viral">
 		<li><?php include('templates/link_rss.inc.php'); ?></li>
-		<li><a href="http://www.facebook.com/share.php?u=<?php echo urlencode($PageUrl); ?>" class="button facebook"><?php echo _('Share'); ?></a></li>
+		<li><?php include('templates/link_facebook_share.inc.php'); ?></li>
 		<li><a href="http://twitter.com/share" class="button twitter"><?php echo _('Tweet'); ?></a></li>
 		<li><a href="javascript:TINY.box.show({url:'<?php echo $Url; ?>design/tinybox.php?PageUrl=<?php echo $PageUrl; ?>',width:480,height:360})" class="button website"><?php echo _('Embed'); ?></a></li>
 		</ul>
