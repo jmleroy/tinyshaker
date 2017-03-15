@@ -18,7 +18,7 @@ if ($shaker->isTinyBox()) {
 
 if ($current_episode) {
     $files = $shaker->getEpisodeFiles();
-	$filesnbr = count($files);
+	$countFiles = count($files);
 ?>
 <!DOCTYPE html>
 <html lang="<?php echo $Lang ?>">
@@ -32,7 +32,7 @@ if ($current_episode) {
 <meta name="viewport" content="width=<?php echo $ImageWidth+40; ?>, user-scalable=no" />
 <script type="text/javascript" src="design/tinyshaker.js"></script>
 <style type="text/css">
-.pagination li { width:<?php echo (substr($ImageWidth, 0, -2)*$filesnbr/100).'px'; ?>; }
+.pagination li { width:<?php echo (substr($ImageWidth, 0, -2) * $countFiles / 100).'px'; ?>; }
 <?php if(!$shaker->isTinyBox()): ?>
 #wrapper {margin-top:10px}
 <?php endif ?>
@@ -63,17 +63,17 @@ if ($current_episode) {
 			<ul id="slides">
 <?php
     $i = 1;
-    foreach ($files as $filename) {
-        if (stripos($filename,'txt') != 0) {
+    foreach ($files as $file) {
+        if ($file->isType('txt')) {
             echo '<li class="content" onclick="tbm.move(+1)"><img width="0" height="0" name="img'.$i.'" />';
-            include($filename);
+            include($file->getPathAndName());
             echo '</li>';
             $i++;
         } else {
-            if ($i == $filesnbr) {
-                echo '<li><img src="'.$filename.'" width="'.$ImageWidth.'" height="'.$ImageHeight.'" alt="'.basename($filename,strrchr($filename,'.')).'" onclick="tbm.move(+1)" /></li>';
+            if ($i == $countFiles) {
+                echo '<li><img src="'.$file->getPathAndName().'" width="'.$ImageWidth.'" height="'.$ImageHeight.'" alt="'.$file->baseName.'" onclick="tbm.move(+1)" /></li>';
             } else {
-                echo '<li><script type="text/javascript">document.write("<img width=\"'.$ImageWidth.'\" height=\"'.$ImageHeight.'\" alt=\"'.basename($filename,strrchr($filename,'.')).'\" name=\"img'.$i.'\" onclick=\"tbm.move(+1)\" />")</script><noscript><img src="'.$filename.'" width="'.$ImageWidth.'" height="'.$ImageHeight.'" alt="'.basename($filename,strrchr($filename,'.')).'" /></noscript></li>';
+                echo '<li><script type="text/javascript">document.write("<img width=\"'.$ImageWidth.'\" height=\"'.$ImageHeight.'\" alt=\"'.$file->baseName.'\" name=\"img'.$i.'\" onclick=\"tbm.move(+1)\" />")</script><noscript><img src="'.$file->getPathAndName().'" width="'.$ImageWidth.'" height="'.$ImageHeight.'" alt="'.$file->baseName.'" /></noscript></li>';
             }
             $i++;
         }
@@ -101,36 +101,35 @@ if ($current_episode) {
 	<ul id="pagination" class="pagination">
 <?php
     $fileMostRecentTime = 0;
-    $episodeStartTime = filemtime($files[0]);
-    foreach ($files as $filename) {
-        $ft = filemtime($filename);
-        if ($ft > $fileMostRecentTime) {
-            $fileMostRecentTime = $ft;
+    $episodeStartTime = $files[0]->time;
+    foreach ($files as $file) {
+        if ($file->time > $fileMostRecentTime) {
+            $fileMostRecentTime = $file->time;
         }
     }
 
     $i = 0;
     $first = 'first';
-    foreach ($files as $filename) {
-        $ft = filemtime($filename);
-        $formattedDate = date(_('PhpDateFormat'), $ft);
-        $fileBasename = basename($filename, strrchr($filename, '.'));
-        $fileIsFlaggedNew = (strpos($filename, '_new') !== false);
+    foreach ($files as $file) {
+        $formattedDate = date(_('PhpDateFormat'), $file->time);
 
         $updt = '&nbsp;';
         $updt_txt = '';
-        if ((($ft > ($fileMostRecentTime-3600)) && ($ft>($episodeStartTime+3600)) && $ShowUpdt) || $fileIsFlaggedNew) {
+        if ((    ($file->time > ($fileMostRecentTime - 3600))
+              && ($file->time > ($episodeStartTime + 3600))
+              && $ShowUpdt
+            ) || $file->isFlaggedNew()) {
             $updt = 'new';
             $updt_txt = '&bull;';
         }
 
-        else if($i == $filesnbr - 1) {
+        if($i == $countFiles - 1) {
             $first = 'last';
         } else {
             $first = '';
         }
 
-        echo '<li onclick="tbm.pos('.$i.')" title="'.$formattedDate.' : '.$fileBasename.'" class="'.$updt.' '.$first.'">'.$updt_txt.'</li>';
+        echo '<li onclick="tbm.pos('.$i.')" title="'.$formattedDate.' : '.$file->baseName.'" class="'.$updt.' '.$first.'">'.$updt_txt.'</li>';
         $i++;
     }
     if ($Support == '1' || ($Support != '0' && $shaker->isTinyBox())) {
@@ -209,26 +208,19 @@ if ($current_episode) {
 </div>
 <script type="text/javascript">
 //liste des images du dossier
-var imgs = new Array(
-			<?php
-    $i = 0;
-    foreach ($files as $filename) {
-        if (stripos($filename,'txt') == 0) {
-            if ($i!=count($files)-1) {
-                echo '"'.$filename.'",';
-            } else {
-                echo '"'.$filename.'");last='.$i.';';
-            }
-        } else {
-            sort($files);
-            if ($i!=count($files)-1) {
-                echo '"design/pixel.png",';
-            } else {
-                echo '"design/pixel.png");last='.$i.';';
-            }
-        }
-        $i++;
+<?php
+    $imageList = [];
+    foreach ($files as $file) {
+        if ($file->isType('txt')) {
+			$imageList[] = '"design/pixel.png"';
+		} else {
+			$imageList[] = '"' . $file->getPathAndName() . '"';
+		}
     }
+?>
+var imgs = new Array(<?php echo join(',', $imageList) ?>);
+last=<?php echo ($countFiles - 1) ?>;
+<?php
     if ((array_key_exists(($ep-1), $episode)) && !$shaker->isTinyBox()) {
         if ($UrlRewriting) {
             echo 'epprev="'.$Lang.'-'.($ep).'";';

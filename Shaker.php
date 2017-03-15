@@ -1,5 +1,6 @@
 <?php
 include_once('Singleton.php');
+include_once('EpisodeFile.php');
 //namespace Tinyshaker;
 
 class Shaker
@@ -8,6 +9,9 @@ class Shaker
 
     protected $path;
     protected $episode;
+    /**
+     * @var EpisodeFile[]
+     */
     protected $episodeFiles;
     protected $currentEpisodeKey;
     protected $tinyBox;
@@ -26,6 +30,9 @@ class Shaker
         return $this->episode;
     }
 
+    /**
+     * @return EpisodeFile[]
+     */
     public function getEpisodeFiles()
     {
         return $this->episodeFiles;
@@ -88,7 +95,7 @@ class Shaker
         $directory = scandir($this->getCurrentEpisodePath(), SCANDIR_SORT_ASCENDING);
         foreach ($directory as $file) {
             if (!is_dir($this->getCurrentEpisodePath() . $file)) {
-                $files[] = $this->getCurrentEpisodePath() . $file;
+                $files[] = new EpisodeFile($this->getCurrentEpisodePath(), $file);
             }
         }
 
