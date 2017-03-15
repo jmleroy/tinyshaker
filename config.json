@@ -2,6 +2,7 @@
     "Title": "Tinyshaker - JavaScript Turbo Media by JiF",
     "Url": "http://tinyshaker.local/",
     "FacebookImageUrl": "http://tinyshaker.local/thumbnail.png",
+    "FacebookCommentsAppId" : "23029976184",
     "Description": "Script PHP/Javascript de publication en ligne de récit sous forme de diaporama.",
     "UrlRewriting": 1,
     "Preload": 5,

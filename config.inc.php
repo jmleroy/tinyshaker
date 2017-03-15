@@ -10,6 +10,7 @@ $filter = array_flip(array(
     "Title",
     "Url",          // adresse url se terminant par un "/"
     "FacebookImageUrl",
+    "FacebookCommentsAppId",
     "Description",
     "UrlRewriting", // passer à '0' si votre hébergeur ne gère pas convenablement la réécriture d'url et que les liens entre les chapitres ne fonctionnent pas. Dans ce cas, remplacez le fichier .htaccess par "htaccess_pour_free-fr" si vous êtes hébergé chez Free.fr, ou essayez de supprimer ce fichier.
     "Preload",      // nombre d'images à précharger à partir de l'image courante

@@ -79,7 +79,7 @@ if ($current_episode) {
         }
     }
 ?>
-				<?php if ($Support == '1' || ($Support != '0' && $shaker->isTinyBox())): ?>
+<?php if ($Support == '1' || ($Support != '0' && $shaker->isTinyBox())): ?>
 				<li class="content">
 					<div id="support">
 					<?php include('templates/link_rss.inc.php'); ?>
@@ -87,12 +87,14 @@ if ($current_episode) {
 					<?php include('templates/link_twitter_share.inc.php'); ?>
 					<a href="javascript:TINY.box.show({url:'<?php echo $Url; ?>design/tinybox.php?PageUrl=<?php echo $PageUrl; ?>',width:480,height:360})" class="button website"><?php echo _('Embed'); ?></a>
 					</div>
+<?php   if (!empty($FacebookCommentsAppId)): ?>
 					<div id="comments">
 					<h2><?php echo _('Comments'); ?></h2>
-					<div id="fb-root"></div><script src="http://connect.facebook.net/<?php echo $LLang; ?>/all.js#appId=23029976184&amp;xfbml=1"></script><fb:comments href="<?php echo urlencode("http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']); ?>" num_posts="1" width="<?php echo $ImageWidth-40; ?>"></fb:comments>
+					<div id="fb-root"></div><script src="http://connect.facebook.net/<?php echo $LLang; ?>/all.js#appId=<?php echo $FacebookCommentsAppId ?>&amp;xfbml=1"></script><fb:comments href="<?php echo urlencode("http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']); ?>" num_posts="1" width="<?php echo $ImageWidth-40; ?>"></fb:comments>
 					</div>
+<?php   endif ?>
 				</li>
-            <?php endif ?>
+<?php endif ?>
 			</ul>
 		</div>
 	</div>
@@ -188,11 +190,18 @@ if ($current_episode) {
 		<li><a href="javascript:TINY.box.show({url:'<?php echo $Url; ?>design/tinybox.php?PageUrl=<?php echo $PageUrl; ?>',width:480,height:360})" class="button website"><?php echo _('Embed'); ?></a></li>
 		</ul>
 <?php
-        if ($Support=='2') {
-            echo '<div id="comments"><h2>'._('Comments').'</h2><div id="fb-root"></div><script src="http://connect.facebook.net/'.$LLang.'/all.js#appId=23029976184&amp;xfbml=1"></script><fb:comments href="'.urlencode("http://".$_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"]).'" num_posts="3" width="'.($ImageWidth-40).'"></fb:comments></div>';
-        } else if ($Support=='3') {
-            echo '<div id="comments"><h2>'._('Comments').'</h2><div id="fb-root"></div><script src="http://connect.facebook.net/'.$LLang.'/all.js#appId=23029976184&amp;xfbml=1"></script><fb:comments href="'.$Url.'" num_posts="3" width="'.($ImageWidth-40).'"></fb:comments></div>';
+        if (!empty($FacebookCommentsAppId)) {
+            $UrlComments = '';
+            if ($Support=='2') {
+                $UrlComments = "http://".$_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"];
+            } else if ($Support=='3') {
+                $UrlComments = $Url;
+            }
+            if ($UrlComments) {
+                echo '<div id="comments"><h2>'._('Comments').'</h2><div id="fb-root"></div><script src="http://connect.facebook.net/'.$LLang.'/all.js#appId='.$FacebookCommentsAppId.'&amp;xfbml=1"></script><fb:comments href="'.$Url.'" num_posts="3" width="'.($ImageWidth-40).'"></fb:comments></div>';
+            }
         }
+
         echo '<div id="credits">'._('PoweredBy').' <a href="http://julien.falgas.fr/tinyshaker">TinyShaker</a><br/>'.$Credits.'</div>';
     } //fin du if($shaker->isTinyBox()!=1)
 ?>
