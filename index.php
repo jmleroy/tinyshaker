@@ -207,32 +207,29 @@ if ($current_episode) {
 
 </div>
 <script type="text/javascript">
-//liste des images du dossier
-var imgs = <?php echo json_encode($shaker->getImageList($files)) ?>,
-	last = <?php echo ($countFiles - 1) ?>,
-	plok;
 <?php
+    $epprev = 0;
+    $epnext = 0;
     if ((array_key_exists(($ep-1), $episode)) && !$shaker->isTinyBox()) {
         if ($UrlRewriting) {
-            echo 'epprev="'.$Lang.'-'.($ep).'";';
+            $epprev = $Lang.'-'.($ep);
         } else {
-            echo 'epprev="?lang='.$Lang.'&ep='.($ep).'";';
+            $epprev = '?lang='.$Lang.'&ep='.($ep);
         }
-    } else {
-        echo 'epprev=0;';
     }
     if ((array_key_exists(($ep+1), $episode)) && !$shaker->isTinyBox()) {
         if ($UrlRewriting) {
-            echo 'epnext="'.$Lang.'-'.($ep+2).'";';
+            $epnext = $Lang.'-'.($ep+2);
         } else {
-            echo 'epnext="?lang='.$Lang.'&ep='.($ep+2).'";';
+            $epnext = '?lang='.$Lang.'&ep='.($ep+2);
         }
-    } else {
-        echo 'epnext=0;';
     }
-
-    echo 'preload='.$Preload.';';
 ?>
+var imgs=<?php echo json_encode($shaker->getImageList($files)) ?>,
+	last=<?php echo ($countFiles - 1) ?>,
+	epprev="<?php echo $epprev ?>",
+	epnext="<?php echo $epnext ?>",
+	preload=<?php echo $Preload ?>;
 var tbm=new TINY.shaker.shake('tbm',{
 	id:'slides',
 	navid:'pagination',

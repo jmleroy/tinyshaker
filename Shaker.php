@@ -72,9 +72,9 @@ class Shaker
 
         foreach ($files as $file) {
             if ($file->isType('txt')) {
-                $imageList[] = '"design/pixel.png"';
+                $imageList[] = 'design/pixel.png';
             } else {
-                $imageList[] = '"' . $file->getPathAndName() . '"';
+                $imageList[] = $file->getPathAndName();
             }
         }
 
