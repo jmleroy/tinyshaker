@@ -1,0 +1,1 @@
+<a href="javascript:TINY.box.show({url:'<?php echo $Url; ?>design/tinybox.php?PageUrl=<?php echo urlencode($PageUrl); ?>',width:480,height:360})" class="button website"><?php echo _('Embed'); ?></a>

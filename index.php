@@ -85,7 +85,7 @@ if ($current_episode) {
 					<?php include('templates/link_rss.inc.php'); ?>
 					<?php include('templates/link_facebook_share.inc.php'); ?>
 					<?php include('templates/link_twitter_share.inc.php'); ?>
-					<a href="javascript:TINY.box.show({url:'<?php echo $Url; ?>design/tinybox.php?PageUrl=<?php echo $PageUrl; ?>',width:480,height:360})" class="button website"><?php echo _('Embed'); ?></a>
+					<?php include('templates/link_embed.inc.php'); ?>
 					</div>
 <?php   if (!empty($FacebookCommentsAppId)): ?>
 					<div id="comments">
@@ -183,12 +183,12 @@ if ($current_episode) {
         }
 ?>
 	<hr/>
-		<ul id="viral">
+    <ul id="viral">
 		<li><?php include('templates/link_rss.inc.php'); ?></li>
 		<li><?php include('templates/link_facebook_share.inc.php'); ?></li>
 		<li><?php include('templates/link_twitter_share.inc.php'); ?></li>
-		<li><a href="javascript:TINY.box.show({url:'<?php echo $Url; ?>design/tinybox.php?PageUrl=<?php echo $PageUrl; ?>',width:480,height:360})" class="button website"><?php echo _('Embed'); ?></a></li>
-		</ul>
+		<li><?php include('templates/link_embed.inc.php'); ?></li>
+    </ul>
 <?php
         if (!empty($FacebookCommentsAppId)) {
             $UrlComments = '';
