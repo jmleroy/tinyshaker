@@ -1,0 +1,1 @@
+<a href="http://twitter.com/share" class="button twitter"><?php echo _('Tweet'); ?></a>

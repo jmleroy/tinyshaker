@@ -84,7 +84,7 @@ if ($current_episode) {
 					<div id="support">
 					<?php include('templates/link_rss.inc.php'); ?>
 					<?php include('templates/link_facebook_share.inc.php'); ?>
-					<a href="http://twitter.com/share" class="button twitter"><?php echo _('Tweet'); ?></a>
+					<?php include('templates/link_twitter_share.inc.php'); ?>
 					<a href="javascript:TINY.box.show({url:'<?php echo $Url; ?>design/tinybox.php?PageUrl=<?php echo $PageUrl; ?>',width:480,height:360})" class="button website"><?php echo _('Embed'); ?></a>
 					</div>
 					<div id="comments">
@@ -184,7 +184,7 @@ if ($current_episode) {
 		<ul id="viral">
 		<li><?php include('templates/link_rss.inc.php'); ?></li>
 		<li><?php include('templates/link_facebook_share.inc.php'); ?></li>
-		<li><a href="http://twitter.com/share" class="button twitter"><?php echo _('Tweet'); ?></a></li>
+		<li><?php include('templates/link_twitter_share.inc.php'); ?></li>
 		<li><a href="javascript:TINY.box.show({url:'<?php echo $Url; ?>design/tinybox.php?PageUrl=<?php echo $PageUrl; ?>',width:480,height:360})" class="button website"><?php echo _('Embed'); ?></a></li>
 		</ul>
 <?php
