@@ -89,8 +89,8 @@ if ($current_episode) {
 					</div>
 <?php   if (!empty($FacebookCommentsAppId)): ?>
 					<div id="comments">
-					<h2><?php echo _('Comments'); ?></h2>
-					<div id="fb-root"></div><script src="http://connect.facebook.net/<?php echo $LLang; ?>/all.js#appId=<?php echo $FacebookCommentsAppId ?>&amp;xfbml=1"></script><fb:comments href="<?php echo urlencode("http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']); ?>" num_posts="1" width="<?php echo $ImageWidth-40; ?>"></fb:comments>
+						<h2><?php echo _('Comments'); ?></h2>
+						<div id="fb-root"></div><script src="http://connect.facebook.net/<?php echo $LLang; ?>/all.js#appId=<?php echo $FacebookCommentsAppId ?>&amp;xfbml=1"></script><fb:comments href="<?php echo urlencode("http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']); ?>" num_posts="1" width="<?php echo $ImageWidth-40; ?>"></fb:comments>
 					</div>
 <?php   endif ?>
 				</li>
