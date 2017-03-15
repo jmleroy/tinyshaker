@@ -1,0 +1,1 @@
+<a href="rss.php?lang=<?php echo $Lang; ?>" class="button feed"><?php echo _('Subscribe'); ?></a>
