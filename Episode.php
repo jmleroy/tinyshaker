@@ -117,15 +117,36 @@ class Episode
 
     protected function loadFiles()
     {
-        $files = [];
+        if (file_exists($this->getPath() . 'episode.json')) {
+            $this->loadElementsFromJson();
+        } else {
+            $this->loadElementsFromScan();
+        }
+    }
+
+    protected function loadElementsFromJson()
+    {
+        $this->files = [];
+        $json = json_decode(file_get_contents($this->getPath() . 'episode.json'));
+
+        foreach ($json->elements as $element) {
+            $this->files[] = new EpisodeFile($this->getPath(), $element->data);
+        }
+
+        $this->countFiles = count($this->files);
+    }
+
+    protected function loadElementsFromScan()
+    {
+        $this->files = [];
         $directory = scandir($this->getPath(), SCANDIR_SORT_ASCENDING);
+
         foreach ($directory as $file) {
             if (!is_dir($this->getPath() . $file)) {
-                $files[] = new EpisodeFile($this->getPath(), $file);
+                $this->files[] = new EpisodeFile($this->getPath(), $file);
             }
         }
 
-        $this->files = $files;
         $this->countFiles = count($this->files);
     }
 }
