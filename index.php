@@ -33,12 +33,15 @@ if ($current_episode) {
 <script type="text/javascript" src="design/tinyshaker.js"></script>
 <style type="text/css">
 .pagination li { width:<?php echo (substr($ImageWidth, 0, -2)*$filesnbr/100).'px'; ?>; }
+<?php if(!$shaker->isTinyBox()): ?>
+#wrapper {margin-top:10px}
+<?php endif ?>
 </style>
 </head>
 <body>
+<div id="wrapper">
 <?php
 	if (!$shaker->isTinyBox()) {
-        echo '<div id="wrapper" style="margin-top:10px;">';
 		if (count($Languages) > 1) {
             echo '<div id="languages">';
             foreach ($Languages as $lg) {
@@ -53,8 +56,6 @@ if ($current_episode) {
 		}
 
 		if ($ShowTitle=='1') { echo '<h1>'.$shaker->getCurrentEpisodeTitle().'</h1>'; }
-	} else {
-        echo '<div id="wrapper">';
     }
 ?>
 	<div>
