@@ -63,6 +63,24 @@ class Shaker
         return $this->getCurrentEpisodeName();
     }
 
+    /**
+     * @param EpisodeFile[] $files
+     */
+    public function getImageList($files)
+    {
+        $imageList = [];
+
+        foreach ($files as $file) {
+            if ($file->isType('txt')) {
+                $imageList[] = '"design/pixel.png"';
+            } else {
+                $imageList[] = '"' . $file->getPathAndName() . '"';
+            }
+        }
+
+        return $imageList;
+    }
+
     protected function loadCurrentEpisodeKey()
     {
         $this->currentEpisodeKey = 0;

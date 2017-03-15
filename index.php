@@ -208,18 +208,9 @@ if ($current_episode) {
 </div>
 <script type="text/javascript">
 //liste des images du dossier
-<?php
-    $imageList = [];
-    foreach ($files as $file) {
-        if ($file->isType('txt')) {
-			$imageList[] = '"design/pixel.png"';
-		} else {
-			$imageList[] = '"' . $file->getPathAndName() . '"';
-		}
-    }
-?>
-var imgs = new Array(<?php echo join(',', $imageList) ?>);
-last=<?php echo ($countFiles - 1) ?>;
+var imgs = <?php echo json_encode($shaker->getImageList($files)) ?>,
+	last = <?php echo ($countFiles - 1) ?>,
+	plok;
 <?php
     if ((array_key_exists(($ep-1), $episode)) && !$shaker->isTinyBox()) {
         if ($UrlRewriting) {
