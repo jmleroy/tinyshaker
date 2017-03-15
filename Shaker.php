@@ -80,19 +80,39 @@ class Shaker
 
     protected function loadEpisodes()
     {
+        if (file_exists($this->path . 'episodes.json')) {
+            $this->loadEpisodesFromJson();
+        } else {
+            $this->loadEpisodesFromScan();
+        }
+    }
+
+    protected function loadEpisodesFromJson()
+    {
+        $json = json_decode(file_get_contents($this->path . 'episodes.json'));
+        $this->episodes = [];
+
+        foreach ($json as $k => $episode) {
+            $e = new Episode($this->path, $episode->name, $k);
+            $e->setTitle($episode->title);
+            $this->episodes[] = $e;
+        }
+    }
+
+    protected function loadEpisodesFromScan()
+    {
         $dir = scandir($this->path, SCANDIR_SORT_ASCENDING);
-        $episodes = array();
+        $this->episodes = [];
         $i = 0;
 
         foreach ($dir as $d) {
             if (is_dir($this->path . $d) && $d[0] != '.') {
                 $e = new Episode($this->path, $d, $i);
-                $episodes[] = $e;
+                $e->setTitle($d);
+                $this->episodes[] = $e;
                 $i++;
             }
         }
-
-        $this->episodes = $episodes;
     }
 
     protected function loadTinyBox()

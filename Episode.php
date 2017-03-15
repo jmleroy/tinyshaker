@@ -41,6 +41,7 @@ class Episode
     {
         $this->path = $path;
         $this->name = $name;
+        $this->title = $name;
         $this->key = $key;
 
         $this->loadFiles();
@@ -67,7 +68,7 @@ class Episode
      */
     public function getTitle()
     {
-        return $this->name;
+        return $this->title;
     }
 
     /**
@@ -107,6 +108,11 @@ class Episode
         }
 
         return $imageList;
+    }
+
+    public function setTitle($t)
+    {
+        $this->title = $t;
     }
 
     protected function loadFiles()
