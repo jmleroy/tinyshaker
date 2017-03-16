@@ -1,38 +1,40 @@
 <?php
 /**
  * Configuration loader
- * Also documents the configuration file
  */
-$rawConfig = file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . 'config.json');
+$configFileName = __DIR__ . DIRECTORY_SEPARATOR . 'config.json';
+if(!file_exists($configFileName)) {
+    die('Missing config.json file');
+}
+include_once('config_default.inc.php');
+$rawConfig = file_get_contents($configFileName);
 $uncommentedConfig = preg_replace("#// .+$#", '', $rawConfig);
 $config = json_decode($uncommentedConfig, true);
 $filter = array_flip(array(
     "Title",
-    "Url",          // adresse url se terminant par un "/"
+    "Url",
     "FacebookImageUrl",
-    "FacebookCommentsAppId",
     "Description",
-    "UrlRewriting", // passer à '0' si votre hébergeur ne gère pas convenablement la réécriture d'url et que les liens entre les chapitres ne fonctionnent pas. Dans ce cas, remplacez le fichier .htaccess par "htaccess_pour_free-fr" si vous êtes hébergé chez Free.fr, ou essayez de supprimer ce fichier.
-    "Preload",      // nombre d'images à précharger à partir de l'image courante
-    "ShowTitle",    // remplacer par '0' pour n'afficher aucun titre
-                    // remplacer par '2' pour afficher le titre de l'épisode sous la jauge de lecture
-    "Support",      // remplacer par '0' pour supprimer l'écran de commentaires en fin d'épisode
-                    // remplacer par '1' pour afficher les commentaires propres à chaque épisode en fin d'épisode
-                    // remplacer par '2' pour afficher les commentaires propres à chaque épisode sous l'épisode
-    "ShowUpdt",     // remplacer par '1' pour que les fichiers mise à jour au sein d'un épisode soient mis en valeur sur la jauge
+    "UrlRewriting",
+    "Preload",
+    "ShowTitle",
+    "FacebookCommentsAppId",
+    "Support",
+    "ShowUpdt",
     "Credits",
     "ImageWidth",
     "ImageHeight",
-    "BgColor",      // couleur de fond
-    "Color",        // couleur principale
-    "HlColor", // Couleur de surbrillance
-    "Lang", // langue par défaut, remplacer par 'en' pour publier en anglais
-    "Languages", // langues disponibles
-    "LanguageCodes", // codes langues disponibles
+    "BgColor",
+    "Color",
+    "HlColor",
+    "Lang",
+    "Languages",
+    "LanguageCodes",
     "IDGoogleAnalytics",
 ));
 
 $filteredConfig = array_intersect_key($config, $filter);
 extract($filteredConfig);
 unset($filteredConfig);
-unset($_config);
+unset($config);
+unset($configFileName);

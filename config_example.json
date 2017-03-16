@@ -1,0 +1,28 @@
+{
+    "Title": "Tinyshaker - JavaScript Turbo Media by JiF",
+    "Url": "http://tinyshaker.local/",
+    "FacebookImageUrl": "http://tinyshaker.local/thumbnail.png",
+    "FacebookCommentsAppId" : "23029976184",
+    "Description": "Script PHP/Javascript de publication en ligne de récit sous forme de diaporama.",
+    "UrlRewriting": 1,
+    "Preload": 5,
+    "ShowTitle": 1,
+    "Support": 3,
+    "ShowUpdt": 0,
+    "Credits": "By <a href=\"http://julien.falgas.fr\">Julien Falgas</a>, inspired by <a href=\"http://www.scriptiny.com/\">Michael Leigeber</a>'s <a href=\"http://www.scriptiny.com/2010/09/fading-slideshow-script/\">TinyFader</a><br/>Grenade design by <a href=\"http://www.fredboot.com\">Fred Boot</a> Icons by <a href=\"http://paulrobertlloyd.com/\">Paul Robert Lloyd</a>",
+    "ImageWidth": "800px",
+    "ImageHeight": "450px",
+    "BgColor": "#353435",
+    "Color": "#454445",
+    "HlColor": "#55BBCC",
+    "Lang": "fr",
+    "Languages": [
+        "fr",
+        "en"
+    ],
+    "LanguageCodes": {
+        "fr": "fr_FR",
+        "en": "en_US"
+    },
+    "IDGoogleAnalytics": ""
+}
