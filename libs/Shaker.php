@@ -1,6 +1,6 @@
 <?php
-include_once('Singleton.php');
-include_once('Episode.php');
+include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Singleton.php');
+include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Episode.php');
 //namespace Tinyshaker;
 
 class Shaker

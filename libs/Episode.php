@@ -1,6 +1,6 @@
 <?php
-include_once('Element.php');
-include_once('EpisodeFile.php');
+include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Element.php');
+include_once(__DIR__ . DIRECTORY_SEPARATOR . 'EpisodeFile.php');
 
 //namespace Tinyshaker;
 

@@ -2,7 +2,7 @@
 require_once('config.inc.php');
 require_once('langs.inc.php');
 
-include_once('Shaker.php');
+include_once('libs/Shaker.php');
 
 $shaker = Shaker::getInstance();
 $shaker->init($Lang);
