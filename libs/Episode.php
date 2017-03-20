@@ -1,5 +1,4 @@
 <?php
-include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Element.php');
 include_once(__DIR__ . DIRECTORY_SEPARATOR . 'EpisodeFile.php');
 
 //namespace Tinyshaker;
@@ -72,7 +71,7 @@ class Episode
     }
 
     /**
-     * @return array|EpisodeFile[]
+     * @return array|Element[]
      */
     public function getFiles()
     {
