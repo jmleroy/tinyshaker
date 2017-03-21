@@ -1,12 +1,12 @@
 <?php
-include_once(__DIR__ . DIRECTORY_SEPARATOR . 'EpisodeFile.php');
+include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Element.php');
 
 //namespace Tinyshaker;
 
 class Episode
 {
     /**
-     * @var EpisodeFile[]
+     * @var Element[]
      */
     protected $files;
     /**
@@ -102,7 +102,7 @@ class Episode
             if ($file->isType('txt')) {
                 $imageList[] = 'design/pixel.png';
             } else {
-                $imageList[] = $file->getPathAndName();
+                $imageList[] = $file->source;
             }
         }
 
@@ -129,7 +129,7 @@ class Episode
         $json = json_decode(file_get_contents($this->getPath() . 'episode.json'));
 
         foreach ($json->elements as $element) {
-            $this->files[] = new EpisodeFile($this->getPath(), $element->data);
+            $this->files[] = new Element($this->getPath(), $element);
         }
 
         $this->countFiles = count($this->files);
@@ -142,7 +142,7 @@ class Episode
 
         foreach ($directory as $file) {
             if (!is_dir($this->getPath() . $file)) {
-                $this->files[] = new EpisodeFile($this->getPath(), $file);
+                $this->files[] = new Element($this->getPath(), $file);
             }
         }
 

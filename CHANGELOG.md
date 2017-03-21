@@ -6,6 +6,7 @@
 - Translations now support arguments
 - htaccess example checks whether mod_rewrite is active before defining URL Rewriting
 - Separated reusable blocks like social links and google analytics
+- Using the episode.json configuration file, you can now include external URIs or base64 raw data as image sources
 
 1.0.0
 =====

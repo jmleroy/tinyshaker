@@ -66,14 +66,14 @@ if ($episode) {
     foreach ($files as $file) {
         if ($file->isType('txt')) {
             echo '<li class="content" onclick="tbm.move(+1)"><img width="0" height="0" name="img'.$i.'" />';
-            include($file->getPathAndName());
+            include($file->source);
             echo '</li>';
             $i++;
         } else {
             if ($i == $episode->countFiles()) {
-                echo '<li><img src="'.$file->getPathAndName().'" width="'.$ImageWidth.'" height="'.$ImageHeight.'" alt="'.$file->baseName.'" onclick="tbm.move(+1)" /></li>';
+                echo '<li><img src="'.$file->source.'" width="'.$ImageWidth.'" height="'.$ImageHeight.'" alt="'.$file->alt.'" onclick="tbm.move(+1)" /></li>';
             } else {
-                echo '<li><script type="text/javascript">document.write("<img width=\"'.$ImageWidth.'\" height=\"'.$ImageHeight.'\" alt=\"'.$file->baseName.'\" name=\"img'.$i.'\" onclick=\"tbm.move(+1)\" />")</script><noscript><img src="'.$file->getPathAndName().'" width="'.$ImageWidth.'" height="'.$ImageHeight.'" alt="'.$file->baseName.'" /></noscript></li>';
+                echo '<li><script type="text/javascript">document.write("<img width=\"'.$ImageWidth.'\" height=\"'.$ImageHeight.'\" alt=\"'.$file->alt.'\" name=\"img'.$i.'\" onclick=\"tbm.move(+1)\" />")</script><noscript><img src="'.$file->source.'" width="'.$ImageWidth.'" height="'.$ImageHeight.'" alt="'.$file->alt.'" /></noscript></li>';
             }
             $i++;
         }
@@ -118,7 +118,7 @@ if ($episode) {
         if ((    ($file->time > ($fileMostRecentTime - 3600))
               && ($file->time > ($episodeStartTime + 3600))
               && $ShowUpdt
-            ) || $file->isFlaggedNew()) {
+            ) || $file->isNew()) {
             $updt = 'new';
             $updt_txt = '&bull;';
         }
@@ -129,7 +129,7 @@ if ($episode) {
             $first = '';
         }
 
-        echo '<li onclick="tbm.pos('.$i.')" title="'.$formattedDate.' : '.$file->baseName.'" class="'.$updt.' '.$first.'">'.$updt_txt.'</li>';
+        echo '<li onclick="tbm.pos('.$i.')" title="'.$formattedDate.' : '.$file->alt.'" class="'.$updt.' '.$first.'">'.$updt_txt.'</li>';
         $i++;
     }
     if ($Support == '1' || ($Support != '0' && $shaker->isTinyBox())) {
